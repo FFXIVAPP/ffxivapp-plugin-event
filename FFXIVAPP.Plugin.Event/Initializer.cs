@@ -29,9 +29,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Plugin.Event.Models;
@@ -124,65 +126,43 @@ namespace FFXIVAPP.Plugin.Event
 
         public static void LoadLogEvents()
         {
+            const string defaultCategoryLabel = "event_MiscellaneousLabel";
+            var defaultCategory = PluginViewModel.Instance.Locale.ContainsKey(defaultCategoryLabel)
+                ? PluginViewModel.Instance.Locale[defaultCategoryLabel]
+                : "Miscellaneous";
+
             PluginViewModel.Instance.Events.Clear();
             if (Constants.XSettings != null)
             {
-                foreach (var xElement in Constants.XSettings.Descendants()
-                                                  .Elements("Event"))
+                foreach (var xElement in Constants.XSettings.Descendants().Elements("Event"))
                 {
-                    var xKey = Guid.Empty;
                     // migrate regex from key, if necessary
                     var xRegEx = xElement.Element("RegEx") != null ? (string) xElement.Element("RegEx") : (string) xElement.Attribute("Key");
-                    var xValue = (string) xElement.Element("Value");
-                    var xSound = (string) xElement.Element("Sound");
-                    double xVolume = 100;
-                    var xDelay = (string) xElement.Element("Delay");
-                    var xCategory = (string) xElement.Element("Category");
-                    var xExecutable = (string) xElement.Element("Executable");
-                    var xEnabled = true;
-                    try
-                    {
-                        xEnabled = (bool) xElement.Element("Enabled");
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    try
-                    {
-                        xVolume = Double.Parse((string) xElement.Element("Volume"));
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    try
-                    {
-                        xKey = (Guid) xElement.Attribute("Key");
-                    }
-                    catch (Exception)
-                    {
-                    }
                     if (String.IsNullOrWhiteSpace(xRegEx))
                     {
                         continue;
                     }
-                    xKey = xKey != Guid.Empty ? xKey : Guid.NewGuid();
+
+                    var xValue = xElement.GetElementValue<string>("Value", null);
+                    var xSound = xElement.GetElementValue<string>("Sound", null);
+                    var xVolume = xElement.GetElementValue<double>("Volume", 1);
+                    var xDelay = xElement.GetElementValue("Delay", 0);
+                    var xCategory = xElement.GetElementValue("Category", defaultCategory);
+                    var xExecutable = xElement.GetElementValue<string>("Executable", null);
+                    var xEnabled = xElement.GetElementValue("Enabled", true);
+                    var xKey = xElement.GetAttributeValue("Key", Guid.NewGuid());
                     xSound = String.IsNullOrWhiteSpace(xValue) ? xSound : xValue;
-                    xCategory = String.IsNullOrWhiteSpace(xCategory) ? PluginViewModel.Instance.Locale["event_MiscellaneousLabel"] : xCategory;
                     var logEvent = new LogEvent
-                    {
-                        Key = xKey,
-                        Sound = xSound,
-                        Volume = xVolume,
-                        RegEx = xRegEx,
-                        Category = xCategory,
-                        Enabled = xEnabled,
-                        Executable = xExecutable
-                    };
-                    int result;
-                    if (Int32.TryParse(xDelay, out result))
-                    {
-                        logEvent.Delay = result;
-                    }
+                                   {
+                                       Key = xKey,
+                                       Sound = xSound,
+                                       Delay = xDelay,
+                                       Volume = xVolume,
+                                       RegEx = xRegEx,
+                                       Category = xCategory,
+                                       Enabled = xEnabled,
+                                       Executable = xExecutable,
+                                   };
                     var found = PluginViewModel.Instance.Events.Any(@event => @event.Key == logEvent.Key);
                     if (!found)
                     {
@@ -192,8 +172,38 @@ namespace FFXIVAPP.Plugin.Event
             }
         }
 
-        /// <summary>
-        /// </summary>
+        private static T GetElementValue<T>(this XContainer xElement, string childElementName, T defaultvalue)
+        {
+            var childElement = xElement.Element(childElementName);
+            if (childElement == null)
+                return defaultvalue;
+
+            return DeserializeValue(childElement.Value, defaultvalue);
+        }
+
+        private static T GetAttributeValue<T>(this XElement xElement, string attributeName, T defaultvalue)
+        {
+            var xAttribute = xElement.Attribute(attributeName);
+            if (xAttribute == null)
+                return defaultvalue;
+
+            return DeserializeValue(xAttribute.Value, defaultvalue);
+        }
+
+        private static T DeserializeValue<T>(string value, T defaultValue)
+        {
+            if (string.IsNullOrEmpty(value))
+                return defaultValue;
+            try
+            {
+                return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(value);
+            }
+            catch (Exception)
+            {
+                return defaultValue;
+            }
+        }
+
         public static void ApplyTheming()
         {
             MainViewModel.SetupGrouping();

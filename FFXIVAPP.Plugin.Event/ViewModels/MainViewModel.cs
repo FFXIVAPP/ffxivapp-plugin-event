@@ -153,11 +153,11 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
             }
-            if (MainView.View.TDelay.Text.Trim() == "" || MainView.View.TRegEx.Text.Trim() == "")
+            if (string.IsNullOrWhiteSpace(MainView.View.TDelay.Text) || string.IsNullOrWhiteSpace(MainView.View.TRegEx.Text))
             {
                 return;
             }
-            if (MainView.View.TCategory.Text.Trim() == "")
+            if (string.IsNullOrWhiteSpace(MainView.View.TCategory.Text))
             {
                 MainView.View.TCategory.Text = PluginViewModel.Instance.Locale["event_MiscellaneousLabel"];
             }

@@ -33,7 +33,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Plugin.Event.Models;
@@ -127,14 +126,13 @@ namespace FFXIVAPP.Plugin.Event
         public static void LoadLogEvents()
         {
             const string defaultCategoryLabel = "event_MiscellaneousLabel";
-            var defaultCategory = PluginViewModel.Instance.Locale.ContainsKey(defaultCategoryLabel)
-                ? PluginViewModel.Instance.Locale[defaultCategoryLabel]
-                : "Miscellaneous";
+            var defaultCategory = PluginViewModel.Instance.Locale.ContainsKey(defaultCategoryLabel) ? PluginViewModel.Instance.Locale[defaultCategoryLabel] : "Miscellaneous";
 
             PluginViewModel.Instance.Events.Clear();
             if (Constants.XSettings != null)
             {
-                foreach (var xElement in Constants.XSettings.Descendants().Elements("Event"))
+                foreach (var xElement in Constants.XSettings.Descendants()
+                                                  .Elements("Event"))
                 {
                     // migrate regex from key, if necessary
                     var xRegEx = xElement.Element("RegEx") != null ? (string) xElement.Element("RegEx") : (string) xElement.Attribute("Key");
@@ -154,17 +152,17 @@ namespace FFXIVAPP.Plugin.Event
                     var xKey = xElement.GetAttributeValue("Key", Guid.NewGuid());
                     xSound = String.IsNullOrWhiteSpace(xValue) ? xSound : xValue;
                     var logEvent = new LogEvent
-                                   {
-                                       Key = xKey,
-                                       Sound = xSound,
-                                       Delay = xDelay,
-                                       Volume = xVolume,
-                                       RegEx = xRegEx,
-                                       Category = xCategory,
-                                       Enabled = xEnabled,
-                                       Executable = xExecutable,
-                                       Arguments = xArguments,
-                                   };
+                    {
+                        Key = xKey,
+                        Sound = xSound,
+                        Delay = xDelay,
+                        Volume = xVolume,
+                        RegEx = xRegEx,
+                        Category = xCategory,
+                        Enabled = xEnabled,
+                        Executable = xExecutable,
+                        Arguments = xArguments,
+                    };
                     var found = PluginViewModel.Instance.Events.Any(@event => @event.Key == logEvent.Key);
                     if (!found)
                     {
@@ -178,7 +176,9 @@ namespace FFXIVAPP.Plugin.Event
         {
             var childElement = xElement.Element(childElementName);
             if (childElement == null)
+            {
                 return defaultvalue;
+            }
 
             return DeserializeValue(childElement.Value, defaultvalue);
         }
@@ -187,7 +187,9 @@ namespace FFXIVAPP.Plugin.Event
         {
             var xAttribute = xElement.Attribute(attributeName);
             if (xAttribute == null)
+            {
                 return defaultvalue;
+            }
 
             return DeserializeValue(xAttribute.Value, defaultvalue);
         }
@@ -195,10 +197,13 @@ namespace FFXIVAPP.Plugin.Event
         private static T DeserializeValue<T>(string value, T defaultValue)
         {
             if (string.IsNullOrEmpty(value))
+            {
                 return defaultValue;
+            }
             try
             {
-                return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(value);
+                return (T) TypeDescriptor.GetConverter(typeof (T))
+                                         .ConvertFromInvariantString(value);
             }
             catch (Exception)
             {

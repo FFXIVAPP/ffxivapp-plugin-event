@@ -315,7 +315,8 @@ namespace FFXIVAPP.Plugin.Event.Properties
                         Value = xArguments
                     }
                 };
-                var element = enumerable.FirstOrDefault(e => e.Attribute("Key").Value == xKey);
+                var element = enumerable.FirstOrDefault(e => e.Attribute("Key")
+                                                              .Value == xKey);
                 if (element == null)
                 {
                     XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Event", xKey, keyPairList);

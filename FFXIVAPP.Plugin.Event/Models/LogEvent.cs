@@ -46,6 +46,7 @@ namespace FFXIVAPP.Plugin.Event.Models
 
         #region Property Bindings
 
+        private string _arguments;
         private string _category;
         private int _delay;
         private bool _enabled;
@@ -54,7 +55,6 @@ namespace FFXIVAPP.Plugin.Event.Models
         private string _regEx;
         private string _sound;
         private double _volume;
-        private string _arguments;
 
         public Guid Key
         {

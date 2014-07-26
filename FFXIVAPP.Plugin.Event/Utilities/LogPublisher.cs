@@ -122,15 +122,14 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
             else
             {
-                var timer = new Timer(delay*1000);
+                var timer = new Timer(delay * 1000);
                 ElapsedEventHandler timerOnElapsed = null;
-                timerOnElapsed = 
-                    delegate
-                    {
-                        timer.Elapsed -= timerOnElapsed;
-                        timer.Dispose();
-                        ExecutableHelper.Run(logEvent.Executable, logEvent.Arguments);
-                    };
+                timerOnElapsed = delegate
+                {
+                    timer.Elapsed -= timerOnElapsed;
+                    timer.Dispose();
+                    ExecutableHelper.Run(logEvent.Executable, logEvent.Arguments);
+                };
                 timer.Elapsed += timerOnElapsed;
                 timer.Start();
             }

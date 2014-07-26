@@ -30,7 +30,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.Utilities;
 using NLog;
 
@@ -47,11 +46,14 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             try
             {
                 var processStartInfo = new ProcessStartInfo
-                                       {
-                                           Arguments = (string.IsNullOrWhiteSpace(arguments) ? "" : arguments),
-                                           FileName = path,
-                                       };
-                using (Process.Start(processStartInfo)) ;
+                {
+                    Arguments = (string.IsNullOrWhiteSpace(arguments) ? "" : arguments),
+                    FileName = path,
+                };
+                using (Process.Start(processStartInfo))
+                {
+                    ;
+                }
             }
             catch (Exception ex)
             {

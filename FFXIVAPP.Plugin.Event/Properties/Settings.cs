@@ -263,7 +263,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
 
             foreach (var item in PluginViewModel.Instance.Events)
             {
-                var xKey = item.Key != Guid.Empty ? item.Key : Guid.NewGuid();
+                var xKey = (item.Key != Guid.Empty ? item.Key : Guid.NewGuid()).ToString();
                 var xRegEx = item.RegEx;
                 var xSound = item.Sound;
                 var xVolume = item.Volume;
@@ -271,6 +271,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
                 var xCategory = item.Category;
                 var xEnabled = item.Enabled;
                 var xExecutable = item.Executable;
+                var xArguments = item.Arguments;
                 var keyPairList = new List<XValuePair>
                 {
                     new XValuePair
@@ -307,55 +308,31 @@ namespace FFXIVAPP.Plugin.Event.Properties
                     {
                         Key = "Executable",
                         Value = xExecutable
+                    },
+                    new XValuePair
+                    {
+                        Key = "Arguments",
+                        Value = xArguments
                     }
                 };
-                var element = enumerable.FirstOrDefault(e => e.Attribute("Key")
-                                                              .Value == xKey.ToString());
+                var element = enumerable.FirstOrDefault(e => e.Attribute("Key").Value == xKey);
                 if (element == null)
                 {
-                    XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Event", xKey.ToString(), keyPairList);
+                    XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Event", xKey, keyPairList);
                 }
                 else
                 {
-                    var xKeyElement = element.Attribute("Key");
-                    if (xKeyElement != null)
+                    element.SetAttributeValue("Key", xKey);
+
+                    foreach (var kv in keyPairList)
                     {
-                        xKeyElement.Value = xKey.ToString();
-                    }
-                    var xRegExElement = element.Element("RegEx");
-                    if (xRegExElement != null)
-                    {
-                        xRegExElement.Value = xRegEx;
-                    }
-                    var xSoundElement = element.Element("Sound");
-                    if (xSoundElement != null)
-                    {
-                        xSoundElement.Value = !String.IsNullOrWhiteSpace(xSound) ? xSound : String.Empty;
-                    }
-                    var xVolumeElement = element.Element("Volume");
-                    if (xVolumeElement != null)
-                    {
-                        xVolumeElement.Value = xVolume.ToString(CultureInfo.InvariantCulture);
-                    }
-                    var xDelayElement = element.Element("Delay");
-                    if (xDelayElement != null)
-                    {
-                        xDelayElement.Value = xDelay.ToString(CultureInfo.InvariantCulture);
-                    }
-                    var xCategoryElement = element.Element("Category");
-                    if (xCategoryElement != null)
-                    {
-                        xCategoryElement.Value = xCategory;
-                    }
-                    var xEnabledElement = element.Element("Enabled");
-                    if (xEnabledElement != null)
-                    {
-                        xEnabledElement.Value = xEnabled.ToString();
-                    }
-                    var xExecutableElement = element.Element("Executable");
-                    if (xExecutableElement != null)
-                    {
-                        xExecutableElement.Value = !String.IsNullOrWhiteSpace(xExecutable) ? xExecutable : String.Empty;
+                        var childElement = element.Element(kv.Key);
+                        if (childElement == null)
+                        {
+                            childElement = new XElement(kv.Key);
+                            element.Add(childElement);
+                        }
+                        childElement.SetValue(kv.Value);
                     }
                 }
             }

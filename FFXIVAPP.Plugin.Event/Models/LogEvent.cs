@@ -54,6 +54,7 @@ namespace FFXIVAPP.Plugin.Event.Models
         private string _regEx;
         private string _sound;
         private double _volume;
+        private string _arguments;
 
         public Guid Key
         {
@@ -121,6 +122,16 @@ namespace FFXIVAPP.Plugin.Event.Models
             set
             {
                 _executable = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Arguments
+        {
+            get { return _arguments; }
+            set
+            {
+                _arguments = value;
                 RaisePropertyChanged();
             }
         }

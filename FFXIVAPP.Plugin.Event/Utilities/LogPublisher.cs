@@ -114,21 +114,26 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             {
                 return;
             }
+
             var delay = logEvent.Delay;
-            Func<bool> runExecutable = () =>
+            if (delay <= 0)
             {
-                var timer = new Timer(delay > 0 ? delay * 1000 : 1);
-                ElapsedEventHandler timerEventHandler = null;
-                timerEventHandler = delegate
-                {
-                    ExecutableHelper.Run(logEvent.Executable);
-                    timer.Elapsed -= timerEventHandler;
-                };
-                timer.Elapsed += timerEventHandler;
+                ExecutableHelper.Run(logEvent.Executable, logEvent.Arguments);
+            }
+            else
+            {
+                var timer = new Timer(delay*1000);
+                ElapsedEventHandler timerOnElapsed = null;
+                timerOnElapsed = 
+                    delegate
+                    {
+                        timer.Elapsed -= timerOnElapsed;
+                        timer.Dispose();
+                        ExecutableHelper.Run(logEvent.Executable, logEvent.Arguments);
+                    };
+                timer.Elapsed += timerOnElapsed;
                 timer.Start();
-                return true;
-            };
-            runExecutable.BeginInvoke(null, null);
+            }
         }
     }
 }

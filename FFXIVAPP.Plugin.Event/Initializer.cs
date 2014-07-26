@@ -143,12 +143,13 @@ namespace FFXIVAPP.Plugin.Event
                         continue;
                     }
 
-                    var xValue = xElement.GetElementValue<string>("Value", null);
-                    var xSound = xElement.GetElementValue<string>("Sound", null);
-                    var xVolume = xElement.GetElementValue<double>("Volume", 1);
+                    var xValue = xElement.GetElementValue("Value", string.Empty);
+                    var xSound = xElement.GetElementValue("Sound", string.Empty);
+                    var xVolume = xElement.GetElementValue("Volume", 1.0d);
                     var xDelay = xElement.GetElementValue("Delay", 0);
                     var xCategory = xElement.GetElementValue("Category", defaultCategory);
-                    var xExecutable = xElement.GetElementValue<string>("Executable", null);
+                    var xExecutable = xElement.GetElementValue("Executable", string.Empty);
+                    var xArguments = xElement.GetElementValue("Arguments", string.Empty);
                     var xEnabled = xElement.GetElementValue("Enabled", true);
                     var xKey = xElement.GetAttributeValue("Key", Guid.NewGuid());
                     xSound = String.IsNullOrWhiteSpace(xValue) ? xSound : xValue;
@@ -162,6 +163,7 @@ namespace FFXIVAPP.Plugin.Event
                                        Category = xCategory,
                                        Enabled = xEnabled,
                                        Executable = xExecutable,
+                                       Arguments = xArguments,
                                    };
                     var found = PluginViewModel.Instance.Events.Any(@event => @event.Key == logEvent.Key);
                     if (!found)

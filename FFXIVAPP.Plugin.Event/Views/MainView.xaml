@@ -159,21 +159,34 @@
                 </Expander>
                 <Expander Header="{Binding Locale[event_ExecutableOptionsHeader],
                                            Source={StaticResource PluginViewModel}}">
-                    <DockPanel Margin="3"
-                               LastChildFill="True">
-                        <TextBlock Padding="5"
+                    <DockPanel Margin="3">
+                        <DockPanel Margin="3" Dock="Top" LastChildFill="True">
+                            <TextBlock
+                                Padding="5"
                                    Text="{Binding Locale[event_ExecutableLabel],
-                                                  Source={StaticResource PluginViewModel}}" />
-                        <Button Margin="3 0 0 0"
+                                                  Source={StaticResource PluginViewModel}}"
+                                DockPanel.Dock="Left"/>
+                            <Button Margin="3 0 0 0"
                                 VerticalContentAlignment="Center"
                                 Command="{Binding SelectExecutableCommand}"
                                 Content="{Binding Locale[event_SelectExecutableButtonText],
-                                                  Source={StaticResource PluginViewModel}}"
-                                DockPanel.Dock="Right" />
-                        <TextBox x:Name="TExecutable"
-                                 DockPanel.Dock="Left"
-                                 Text="{Binding Locale[event_SampleExecutable],
-                                                Source={StaticResource PluginViewModel}}" />
+                                                    Source={StaticResource PluginViewModel}}"
+                               DockPanel.Dock="Right" />
+                            <TextBox x:Name="TExecutable"
+                                Text="{Binding Locale[event_SampleExecutable],
+                                            Source={StaticResource PluginViewModel}}" />
+                        </DockPanel>
+                        <DockPanel Dock="Bottom">
+                            <!-- TODO: when localization is completed for aguments, use this line:
+                            <TextBlock Padding="5"
+                                   Text="{Binding Locale[event_ArgumentsLabel],
+                                                  Source={StaticResource PluginViewModel}}" DockPanel.Dock="Left" />-->
+                            <TextBlock Padding="5" Text="Arguments:" DockPanel.Dock="Left" />
+
+                            <TextBox x:Name="TArguments"
+                                DockPanel.Dock="Left"
+                                Text="" />
+                        </DockPanel>
                     </DockPanel>
                 </Expander>
             </StackPanel>

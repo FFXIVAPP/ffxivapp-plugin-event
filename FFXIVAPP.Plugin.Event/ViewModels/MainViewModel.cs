@@ -153,11 +153,11 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
             }
-            if (MainView.View.TDelay.Text.Trim() == "" || MainView.View.TRegEx.Text.Trim() == "")
+            if (string.IsNullOrWhiteSpace(MainView.View.TDelay.Text) || string.IsNullOrWhiteSpace(MainView.View.TRegEx.Text))
             {
                 return;
             }
-            if (MainView.View.TCategory.Text.Trim() == "")
+            if (string.IsNullOrWhiteSpace(MainView.View.TCategory.Text))
             {
                 MainView.View.TCategory.Text = PluginViewModel.Instance.Locale["event_MiscellaneousLabel"];
             }
@@ -178,6 +178,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 RegEx = MainView.View.TRegEx.Text,
                 Category = MainView.View.TCategory.Text,
                 Executable = MainView.View.TExecutable.Text,
+                Arguments = MainView.View.TArguments.Text,
                 Volume = MainView.View.TVolume.Value * 100
             };
             int result;
@@ -200,6 +201,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             MainView.View.Events.UnselectAll();
             MainView.View.TRegEx.Text = "";
             MainView.View.TExecutable.Text = "";
+            MainView.View.TArguments.Text = "";
         }
 
         /// <summary>
@@ -252,6 +254,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             MainView.View.TRegEx.Text = GetValueBySelectedItem(MainView.View.Events, "RegEx");
             MainView.View.TCategory.Text = GetValueBySelectedItem(MainView.View.Events, "Category");
             MainView.View.TExecutable.Text = GetValueBySelectedItem(MainView.View.Events, "Executable");
+            MainView.View.TArguments.Text = GetValueBySelectedItem(MainView.View.Events, "Arguments");
         }
 
         private static void DeleteCategory(string categoryName)

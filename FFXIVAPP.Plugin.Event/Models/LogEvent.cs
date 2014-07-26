@@ -46,6 +46,7 @@ namespace FFXIVAPP.Plugin.Event.Models
 
         #region Property Bindings
 
+        private string _arguments;
         private string _category;
         private int _delay;
         private bool _enabled;
@@ -121,6 +122,16 @@ namespace FFXIVAPP.Plugin.Event.Models
             set
             {
                 _executable = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Arguments
+        {
+            get { return _arguments; }
+            set
+            {
+                _arguments = value;
                 RaisePropertyChanged();
             }
         }

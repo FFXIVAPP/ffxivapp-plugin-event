@@ -30,7 +30,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.Utilities;
 using NLog;
 
@@ -38,7 +37,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
 {
     public static class ExecutableHelper
     {
-        public static void Run(string path)
+        public static void Run(string path, string arguments)
         {
             if (String.IsNullOrWhiteSpace(path) || !File.Exists(path))
             {
@@ -46,7 +45,15 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
             try
             {
-                DispatcherHelper.Invoke(() => Process.Start(path));
+                var processStartInfo = new ProcessStartInfo
+                {
+                    Arguments = (string.IsNullOrWhiteSpace(arguments) ? "" : arguments),
+                    FileName = path,
+                };
+                using (Process.Start(processStartInfo))
+                {
+                    ;
+                }
             }
             catch (Exception ex)
             {

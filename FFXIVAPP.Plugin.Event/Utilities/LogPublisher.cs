@@ -28,7 +28,12 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 
 using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.Hosting;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Timers;
 using FFXIVAPP.Common.Core.Memory;
 using FFXIVAPP.Common.Helpers;
@@ -47,20 +52,17 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             try
             {
                 var line = chatLogEntry.Line.Replace("  ", " ");
-                foreach (var item in PluginViewModel.Instance.Events)
+                foreach (var item in PluginViewModel.Instance.Events.Where(e => e.Enabled))
                 {
-                    if (!item.Enabled)
-                    {
-                        continue;
-                    }
                     var resuccess = false;
-                    var check = new Regex(item.RegEx);
+                    var arguments = item.Arguments;
                     if (SharedRegEx.IsValidRegex(item.RegEx))
                     {
-                        var reg = check.Match(line);
+                        var reg = Regex.Match(line, item.RegEx);
                         if (reg.Success)
                         {
                             resuccess = true;
+                            arguments = reg.Result(item.Arguments);
                         }
                     }
                     else
@@ -72,7 +74,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                         continue;
                     }
                     PlaySound(item);
-                    RunExecutable(item);
+                    RunExecutable(item, arguments);
                 }
             }
             catch (Exception ex)
@@ -111,7 +113,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
         }
 
-        private static void RunExecutable(LogEvent logEvent)
+        private static void RunExecutable(LogEvent logEvent, string arguments)
         {
             if (String.IsNullOrWhiteSpace(logEvent.Executable))
             {
@@ -121,7 +123,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             var delay = logEvent.Delay;
             if (delay <= 0)
             {
-                ExecutableHelper.Run(logEvent.Executable, logEvent.Arguments);
+                ExecutableHelper.Run(logEvent.Executable, arguments);
             }
             else
             {
@@ -131,7 +133,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 {
                     timer.Elapsed -= timerOnElapsed;
                     timer.Dispose();
-                    ExecutableHelper.Run(logEvent.Executable, logEvent.Arguments);
+                    ExecutableHelper.Run(logEvent.Executable, arguments);
                 };
                 timer.Elapsed += timerOnElapsed;
                 timer.Start();

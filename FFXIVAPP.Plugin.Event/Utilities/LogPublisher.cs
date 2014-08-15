@@ -83,29 +83,32 @@ namespace FFXIVAPP.Plugin.Event.Utilities
 
         private static void PlaySound(LogEvent logEvent)
         {
-            if (String.IsNullOrWhiteSpace(logEvent.Sound))
+            var soundFile = logEvent.Sound;
+            if (String.IsNullOrWhiteSpace(soundFile))
             {
                 return;
             }
+
+            var volume = logEvent.Volume*Settings.Default.GlobalVolume;
             var delay = logEvent.Delay;
-            Func<bool> playSound = () =>
+            if (delay <= 0)
             {
-                var timer = new Timer(delay > 0 ? delay * 1000 : 1);
+                SoundPlayerHelper.PlayCached(soundFile, (int) volume);
+            }
+            else
+            {
+                var timer = new Timer(delay > 0 ? delay*1000 : 1);
                 ElapsedEventHandler timerEventHandler = null;
                 timerEventHandler = delegate
-                {
-                    DispatcherHelper.Invoke(delegate
-                    {
-                        var volume = logEvent.Volume * Settings.Default.GlobalVolume;
-                        SoundPlayerHelper.PlayCached(logEvent.Sound, (int) volume);
-                    });
-                    timer.Elapsed -= timerEventHandler;
-                };
+                                    {
+                                        timer.Elapsed -= timerEventHandler;
+                                        timer.Dispose();
+
+                                        SoundPlayerHelper.PlayCached(soundFile, (int) volume);
+                                    };
                 timer.Elapsed += timerEventHandler;
                 timer.Start();
-                return true;
-            };
-            playSound.BeginInvoke(null, null);
+            }
         }
 
         private static void RunExecutable(LogEvent logEvent)

@@ -28,12 +28,8 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 
 using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Hosting;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Timers;
 using FFXIVAPP.Common.Core.Memory;
 using FFXIVAPP.Common.Helpers;
@@ -91,7 +87,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 return;
             }
 
-            var volume = logEvent.Volume*Settings.Default.GlobalVolume;
+            var volume = logEvent.Volume * Settings.Default.GlobalVolume;
             var delay = logEvent.Delay;
             if (delay <= 0)
             {
@@ -99,15 +95,15 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
             else
             {
-                var timer = new Timer(delay > 0 ? delay*1000 : 1);
+                var timer = new Timer(delay > 0 ? delay * 1000 : 1);
                 ElapsedEventHandler timerEventHandler = null;
                 timerEventHandler = delegate
-                                    {
-                                        timer.Elapsed -= timerEventHandler;
-                                        timer.Dispose();
+                {
+                    timer.Elapsed -= timerEventHandler;
+                    timer.Dispose();
 
-                                        SoundPlayerHelper.PlayCached(soundFile, (int) volume);
-                                    };
+                    SoundPlayerHelper.PlayCached(soundFile, (int) volume);
+                };
                 timer.Elapsed += timerEventHandler;
                 timer.Start();
             }

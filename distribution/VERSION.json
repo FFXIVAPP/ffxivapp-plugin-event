@@ -1,7 +1,7 @@
 ﻿{
     "PluginInfo": {
         "Name": "FFXIVAPP.Plugin.Event",
-        "Version": "3.0.5319.36009",
+        "Version": "3.0.5341.22910",
         "Files": [
             {
                 "Name": "FFXIVAPP.Plugin.Event.dll",

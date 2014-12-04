@@ -95,7 +95,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
             else
             {
-                var timer = new Timer(delay > 0 ? delay * 1000 : 1);
+                var timer = new Timer(delay * 1000);
                 ElapsedEventHandler timerEventHandler = null;
                 timerEventHandler = delegate
                 {

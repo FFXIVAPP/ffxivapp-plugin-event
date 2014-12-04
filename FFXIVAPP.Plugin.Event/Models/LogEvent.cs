@@ -42,6 +42,7 @@ namespace FFXIVAPP.Plugin.Event.Models
             Executable = "";
             Sound = "";
             Volume = 100;
+            TTS = "";
         }
 
         #region Property Bindings
@@ -55,6 +56,7 @@ namespace FFXIVAPP.Plugin.Event.Models
         private string _regEx;
         private string _sound;
         private double _volume;
+        private string _tts;
 
         public Guid Key
         {
@@ -72,6 +74,16 @@ namespace FFXIVAPP.Plugin.Event.Models
             set
             {
                 _sound = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string TTS
+        {
+            get { return _tts; }
+            set
+            {
+                _tts = value;
                 RaisePropertyChanged();
             }
         }

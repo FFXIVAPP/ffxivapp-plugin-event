@@ -29,7 +29,9 @@
 
 using System;
 using System.Linq;
+using System.Speech.Synthesis;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Timers;
 using FFXIVAPP.Common.Core.Memory;
 using FFXIVAPP.Common.Helpers;
@@ -38,6 +40,7 @@ using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Properties;
 using NLog;
+using Timer = System.Timers.Timer;
 
 namespace FFXIVAPP.Plugin.Event.Utilities
 {
@@ -71,6 +74,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                     }
                     PlaySound(item);
                     RunExecutable(item, arguments);
+                    ThreadPool.QueueUserWorkItem(logEvent => PlayTTS((LogEvent)logEvent), item);
                 }
             }
             catch (Exception ex)
@@ -133,6 +137,47 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 };
                 timer.Elapsed += timerOnElapsed;
                 timer.Start();
+            }
+        }
+
+        private static void PlayTTS(LogEvent logEvent)
+        {
+            var tts = logEvent.TTS;
+            if (String.IsNullOrWhiteSpace(tts))
+            {
+                return;
+            }
+
+            var volume = Convert.ToInt32(logEvent.Volume*Settings.Default.GlobalVolume);
+            var delay = logEvent.Delay;
+            if (delay <= 0)
+            {
+                PlayTTS(tts, volume);
+            }
+            else
+            {
+                var timer = new Timer(delay*1000);
+                ElapsedEventHandler timerEventHandler = null;
+                timerEventHandler = delegate
+                {
+                    timer.Elapsed -= timerEventHandler;
+                    timer.Dispose();
+
+                    PlayTTS(tts, volume);
+                };
+                timer.Elapsed += timerEventHandler;
+                timer.Start();
+            }
+        }
+
+        private static void PlayTTS(string tts, int volume)
+        {
+            using (var synthesizer = new SpeechSynthesizer())
+            {
+                synthesizer.Volume = volume; 
+                synthesizer.Rate = -2;
+
+                synthesizer.Speak(tts);
             }
         }
     }

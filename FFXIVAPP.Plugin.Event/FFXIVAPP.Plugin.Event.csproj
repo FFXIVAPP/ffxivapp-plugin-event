@@ -100,6 +100,7 @@
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="Utilities\ExecutableHelper.cs" />
     <Compile Include="Utilities\LogPublisher.cs" />
+    <Compile Include="Utilities\TTSPlayer.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs">
       <SubType>
       </SubType>

@@ -28,17 +28,22 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Speech.Synthesis;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Timers;
+using System.Windows.Documents;
 using FFXIVAPP.Common.Core.Memory;
+using FFXIVAPP.Common.Core.Memory.Enums;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Properties;
+using NAudio.Wave;
 using NLog;
 using Timer = System.Timers.Timer;
 
@@ -72,9 +77,8 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                     {
                         continue;
                     }
-                    PlaySound(item);
-                    RunExecutable(item, arguments);
-                    ThreadPool.QueueUserWorkItem(logEvent => PlayTTS((LogEvent)logEvent), item);
+
+                    ExecutLogEvent(item, arguments);
                 }
             }
             catch (Exception ex)
@@ -83,101 +87,80 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
         }
 
-        private static void PlaySound(LogEvent logEvent)
+        private static void ExecutLogEvent(LogEvent logEvent, string arguments)
+        {
+            var volume = Convert.ToInt32(logEvent.Volume * Settings.Default.GlobalVolume);
+
+            var actions = new List<Action>
+                          {
+                              PlaySound(logEvent, volume),
+                              RunExecutable(logEvent, arguments),
+                              PlayTTS(logEvent, volume)
+                          };
+            actions.RemoveAll(a => a == null);
+            if (!actions.Any())
+            {
+                return;
+            }
+
+            var delay = logEvent.Delay;
+            if (delay <= 0)
+            {
+                ExecuteActions(actions);
+            }
+            else
+            {
+                var timer = new Timer(delay * 1000);
+                ElapsedEventHandler timerEventHandler = null;
+                timerEventHandler = delegate
+                {
+                    timer.Elapsed -= timerEventHandler;
+                    timer.Dispose();
+
+                    ExecuteActions(actions);
+                };
+                timer.Elapsed += timerEventHandler;
+                timer.Start();
+            }
+        }
+
+        private static Action PlaySound(LogEvent logEvent, int volume)
         {
             var soundFile = logEvent.Sound;
             if (String.IsNullOrWhiteSpace(soundFile))
             {
-                return;
+                return null;
             }
 
-            var volume = logEvent.Volume * Settings.Default.GlobalVolume;
-            var delay = logEvent.Delay;
-            if (delay <= 0)
-            {
-                SoundPlayerHelper.PlayCached(soundFile, (int) volume);
-            }
-            else
-            {
-                var timer = new Timer(delay * 1000);
-                ElapsedEventHandler timerEventHandler = null;
-                timerEventHandler = delegate
-                {
-                    timer.Elapsed -= timerEventHandler;
-                    timer.Dispose();
-
-                    SoundPlayerHelper.PlayCached(soundFile, (int) volume);
-                };
-                timer.Elapsed += timerEventHandler;
-                timer.Start();
-            }
+            return () => SoundPlayerHelper.PlayCached(soundFile, volume);
         }
 
-        private static void RunExecutable(LogEvent logEvent, string arguments)
+        private static Action RunExecutable(LogEvent logEvent, string arguments)
         {
             if (String.IsNullOrWhiteSpace(logEvent.Executable))
             {
-                return;
+                return null;
             }
 
-            var delay = logEvent.Delay;
-            if (delay <= 0)
-            {
-                ExecutableHelper.Run(logEvent.Executable, arguments);
-            }
-            else
-            {
-                var timer = new Timer(delay * 1000);
-                ElapsedEventHandler timerOnElapsed = null;
-                timerOnElapsed = delegate
-                {
-                    timer.Elapsed -= timerOnElapsed;
-                    timer.Dispose();
-                    ExecutableHelper.Run(logEvent.Executable, arguments);
-                };
-                timer.Elapsed += timerOnElapsed;
-                timer.Start();
-            }
+            return () => ExecutableHelper.Run(logEvent.Executable, arguments);
         }
 
-        private static void PlayTTS(LogEvent logEvent)
+        private static Action PlayTTS(LogEvent logEvent, int volume)
         {
             var tts = logEvent.TTS;
             if (String.IsNullOrWhiteSpace(tts))
             {
-                return;
+                return null;
             }
 
-            var volume = Convert.ToInt32(logEvent.Volume*Settings.Default.GlobalVolume);
-            var delay = logEvent.Delay;
-            if (delay <= 0)
-            {
-                PlayTTS(tts, volume);
-            }
-            else
-            {
-                var timer = new Timer(delay*1000);
-                ElapsedEventHandler timerEventHandler = null;
-                timerEventHandler = delegate
-                {
-                    timer.Elapsed -= timerEventHandler;
-                    timer.Dispose();
-
-                    PlayTTS(tts, volume);
-                };
-                timer.Elapsed += timerEventHandler;
-                timer.Start();
-            }
+            return () => new TTSPlayer().Speak(tts, volume);
         }
 
-        private static void PlayTTS(string tts, int volume)
+        private static void ExecuteActions(IEnumerable<Action> actions)
         {
-            using (var synthesizer = new SpeechSynthesizer())
+            foreach (var action in actions)
             {
-                synthesizer.Volume = volume; 
-                synthesizer.Rate = -2;
-
-                synthesizer.Speak(tts);
+                action();
             }
         }
     }

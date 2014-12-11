@@ -13,7 +13,7 @@ using NAudio.Wave;
 
 namespace FFXIVAPP.Plugin.Event.Utilities
 {
-    public class TTSPlayer
+    public static class TTSPlayer
     {
         private const int Latency = 100;
         private static readonly ConcurrentDictionary<Tuple<string, int>, byte[]> Cached;
@@ -23,22 +23,20 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             Cached = new ConcurrentDictionary<Tuple<string, int>, byte[]>(new KeyEqualityComparer());
         }
 
-        private DirectSoundOut _directSoundOut;
-        private WaveFileReader _waveFileReader;
-        private WaveChannel32 _waveChannel;
-        private MemoryStream _memoryStream;
-
-        public void Speak(string tts, int volume)
+        public static void Speak(string tts, int volume)
         {
-            _memoryStream = GetMemoryStream(tts, volume);
-            _directSoundOut = (Common.Constants.DefaultAudioDevice == Guid.Empty)
-                ? new DirectSoundOut(Latency)
-                : new DirectSoundOut(Common.Constants.DefaultAudioDevice, Latency);
-            _waveFileReader = new WaveFileReader(_memoryStream);
-            _waveChannel = new WaveChannel32(_waveFileReader);
-            _directSoundOut.Init(_waveChannel);
-            _directSoundOut.PlaybackStopped += DisposeDirectSound;
-            _directSoundOut.Play();
+            var disposable = new Disposable
+                             {
+                                 MemoryStream = GetMemoryStream(tts, volume),
+                                 DirectSoundOut = (Common.Constants.DefaultAudioDevice == Guid.Empty)
+                                     ? new DirectSoundOut(Latency)
+                                     : new DirectSoundOut(Common.Constants.DefaultAudioDevice, Latency),
+                             };
+            disposable.WaveFileReader = new WaveFileReader(disposable.MemoryStream);
+            disposable.WaveChannel = new WaveChannel32(disposable.WaveFileReader);
+            disposable.DirectSoundOut.Init(disposable.WaveChannel);
+            disposable.DirectSoundOut.PlaybackStopped += disposable.DisposeDirectSound;
+            disposable.DirectSoundOut.Play();
         }
 
         private static MemoryStream GetMemoryStream(string tts, int volume)
@@ -65,25 +63,37 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
         }
 
-        private void DisposeDirectSound(object sender, StoppedEventArgs e)
+        private class Disposable : IDisposable
         {
-            _directSoundOut.PlaybackStopped -= DisposeDirectSound;
-            Dispose();
-        }
+            public DirectSoundOut DirectSoundOut;
+            public WaveFileReader WaveFileReader;
+            public WaveChannel32 WaveChannel;
+            public MemoryStream MemoryStream;
 
-        private void Dispose()
-        {
-            if (_waveChannel != null)
-                _waveChannel.Dispose();
-            _waveChannel = null;
+            public void Dispose()
+            {
+                if (WaveFileReader != null)
+                    WaveFileReader.Dispose();
+                WaveFileReader = null;
 
-            if (_waveFileReader != null)
-                _waveFileReader.Dispose();
-            _waveFileReader = null;
+                if (WaveChannel != null)
+                    WaveChannel.Dispose();
+                WaveChannel = null;
 
-            if (_directSoundOut != null)
-                _directSoundOut.Dispose();
-            _directSoundOut = null;
+                if (MemoryStream != null)
+                    MemoryStream.Dispose();
+                MemoryStream = null;
+
+                if (DirectSoundOut != null)
+                    DirectSoundOut.Dispose();
+                DirectSoundOut = null;
+            }
+
+            public void DisposeDirectSound(object sender, StoppedEventArgs e)
+            {
+                DirectSoundOut.PlaybackStopped -= DisposeDirectSound;
+                Dispose();
+            }
         }
 
         private class KeyEqualityComparer : IEqualityComparer<Tuple<string, int>>

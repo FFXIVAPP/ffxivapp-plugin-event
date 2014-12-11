@@ -60,6 +60,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 {
                     var resuccess = false;
                     var arguments = item.Arguments;
+                    var tts = item.TTS;
                     if (SharedRegEx.IsValidRegex(item.RegEx))
                     {
                         var reg = Regex.Match(line, item.RegEx);
@@ -67,6 +68,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                         {
                             resuccess = true;
                             arguments = reg.Result(item.Arguments);
+                            tts = reg.Result(tts);
                         }
                     }
                     else
@@ -78,7 +80,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                         continue;
                     }
 
-                    ExecutLogEvent(item, arguments);
+                    ExecutLogEvent(item, arguments, tts);
                 }
             }
             catch (Exception ex)
@@ -87,7 +89,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
         }
 
-        private static void ExecutLogEvent(LogEvent logEvent, string arguments)
+        private static void ExecutLogEvent(LogEvent logEvent, string arguments, string tts)
         {
             var volume = Convert.ToInt32(logEvent.Volume * Settings.Default.GlobalVolume);
 
@@ -95,7 +97,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                           {
                               PlaySound(logEvent, volume),
                               RunExecutable(logEvent, arguments),
-                              PlayTTS(logEvent, volume)
+                              PlayTTS(tts, volume)
                           };
             actions.RemoveAll(a => a == null);
             if (!actions.Any())
@@ -145,15 +147,14 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             return () => ExecutableHelper.Run(logEvent.Executable, arguments);
         }
 
-        private static Action PlayTTS(LogEvent logEvent, int volume)
+        private static Action PlayTTS(string tts, int volume)
         {
-            var tts = logEvent.TTS;
             if (String.IsNullOrWhiteSpace(tts))
             {
                 return null;
             }
 
-            return () => new TTSPlayer().Speak(tts, volume);
+            return () => TTSPlayer.Speak(tts, volume);
         }
 
         private static void ExecuteActions(IEnumerable<Action> actions)

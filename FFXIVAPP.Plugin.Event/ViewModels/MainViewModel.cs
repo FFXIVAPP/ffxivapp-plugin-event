@@ -137,7 +137,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             }
             if (!string.IsNullOrWhiteSpace(MainView.View.TTTS.Text))
             {
-                new TTSPlayer().Speak(MainView.View.TTTS.Text, volume);
+                TTSPlayer.Speak(MainView.View.TTTS.Text, volume);
             }
         }
 

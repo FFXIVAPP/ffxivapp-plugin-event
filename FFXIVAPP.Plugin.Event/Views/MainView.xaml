@@ -126,35 +126,61 @@
                                            Source={StaticResource PluginViewModel}}">
                     <DockPanel Margin="3"
                                LastChildFill="True">
-                        <TextBlock Padding="5"
-                                   Text="{Binding Locale[event_SoundLabel],
-                                                  Source={StaticResource PluginViewModel}}" />
-                        <ComboBox x:Name="TSound"
-                                  Width="120"
-                                  IsReadOnly="False"
-                                  ItemsSource="{Binding SoundFiles,
-                                                        Source={StaticResource PluginViewModel}}" />
-                        <TextBlock Padding="5"
-                                   Text="{Binding Locale[event_VolumeLabel],
-                                                  Source={StaticResource PluginViewModel}}" />
-                        <TextBlock Width="60"
-                                   VerticalAlignment="Center"
-                                   Padding="5"
-                                   Text="{Binding ElementName=TVolume,
-                                                  Path=Value,
-                                                  StringFormat=\{0:P2\}}" />
-                        <Button Margin="3 0 0 0"
-                                Command="{Binding TestSoundCommand}"
-                                Content="{Binding Locale[event_TestSoundButtonText],
-                                                  Source={StaticResource PluginViewModel}}"
-                                DockPanel.Dock="Right" />
-                        <Slider x:Name="TVolume"
-                                IsSnapToTickEnabled="True"
-                                Maximum="1"
-                                Minimum="0"
-                                TickFrequency="0.025"
-                                TickPlacement="BottomRight"
-                                Value="1" />
+                        <Grid Margin="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="33" />
+                                <RowDefinition Height="33" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="250"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Grid.Row="0"
+                                       Padding="5"
+                                       Text="{Binding Locale[event_SoundLabel],
+                                                      Source={StaticResource PluginViewModel}}" />
+                            <ComboBox Grid.Column="1" Grid.Row="0"
+                                      x:Name="TSound"
+                                      Width="Auto"
+                                      Height="27"
+                                      IsReadOnly="False"
+                                      ItemsSource="{Binding SoundFiles,
+                                                            Source={StaticResource PluginViewModel}}" />
+                            <TextBlock Grid.Column="0" Grid.Row="1"
+                                       Padding="5"
+                                       Text="TTS" />
+                            <TextBox Grid.Column="1" Grid.Row="1"
+                                      x:Name="TTTS"
+                                      Width="Auto"
+                                      Height="27"
+                                      IsReadOnly="False" />
+                        </Grid>
+                        <DockPanel Height="30" Margin="3 0 0 0">
+                            <TextBlock Padding="5"
+                                       Text="{Binding Locale[event_VolumeLabel],
+                                                      Source={StaticResource PluginViewModel}}" />
+                            <TextBlock Width="60"
+                                       VerticalAlignment="Center"
+                                       Margin="3 0 0 0"
+                                       Height="27"
+                                       Padding="5"
+                                       Text="{Binding ElementName=TVolume,
+                                                      Path=Value,
+                                                      StringFormat=\{0:P2\}}" />
+                            <Button Margin="3 0 0 0"
+                                    Height="27"
+                                    Command="{Binding TestSoundCommand}"
+                                    Content="{Binding Locale[event_TestSoundButtonText],
+                                                      Source={StaticResource PluginViewModel}}"
+                                    DockPanel.Dock="Right" />
+                            <Slider x:Name="TVolume"
+                                    IsSnapToTickEnabled="True"
+                                    Maximum="1"
+                                    Minimum="0"
+                                    TickFrequency="0.025"
+                                    TickPlacement="BottomRight"
+                                    Value="1" />
+                        </DockPanel>
                     </DockPanel>
                 </Expander>
                 <Expander Header="{Binding Locale[event_ExecutableOptionsHeader],

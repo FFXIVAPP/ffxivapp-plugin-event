@@ -28,10 +28,6 @@ namespace FFXIVAPP.Plugin.Event.Utilities
         private WaveChannel32 _waveChannel;
         private MemoryStream _memoryStream;
 
-        public TTSPlayer()
-        {
-        }
-
         public void Speak(string tts, int volume)
         {
             _memoryStream = GetMemoryStream(tts, volume);
@@ -41,31 +37,32 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             _waveFileReader = new WaveFileReader(_memoryStream);
             _waveChannel = new WaveChannel32(_waveFileReader);
             _directSoundOut.Init(_waveChannel);
-            _directSoundOut.Play();
             _directSoundOut.PlaybackStopped += DisposeDirectSound;
+            _directSoundOut.Play();
         }
 
         private static MemoryStream GetMemoryStream(string tts, int volume)
         {
             var tuple = new Tuple<string, int>(tts, volume);
-            var ttsData = Cached.GetOrAdd(tuple,
-                _ =>
-                {
-                    using (var memstream = new MemoryStream())
-                    {
-                        using (var synthesizer = new SpeechSynthesizer())
-                        {
-                            synthesizer.SetOutputToWaveStream(memstream);
-                            synthesizer.Volume = volume;
-                            synthesizer.Rate = -2;
-
-                            synthesizer.Speak(tts);
-                        }
-                        memstream.Seek(0, SeekOrigin.Begin);
-                        return memstream.ToArray();
-                    }
-                });
+            var ttsData = Cached.GetOrAdd(tuple, t => CreateNewMemoryStream(t.Item1, t.Item2));
             return new MemoryStream(ttsData);
+        }
+
+        private static byte[] CreateNewMemoryStream(string tts, int volume)
+        {
+            using (var memstream = new MemoryStream())
+            {
+                using (var synthesizer = new SpeechSynthesizer())
+                {
+                    synthesizer.SetOutputToWaveStream(memstream);
+                    synthesizer.Volume = volume;
+                    synthesizer.Rate = -2;
+
+                    synthesizer.Speak(tts);
+                }
+                memstream.Seek(0, SeekOrigin.Begin);
+                return memstream.ToArray();
+            }
         }
 
         private void DisposeDirectSound(object sender, StoppedEventArgs e)

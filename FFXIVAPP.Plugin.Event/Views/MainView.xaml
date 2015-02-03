@@ -155,32 +155,61 @@
                                       Height="27"
                                       IsReadOnly="False" />
                         </Grid>
-                        <DockPanel Height="30" Margin="3 0 0 0">
-                            <TextBlock Padding="5"
-                                       Text="{Binding Locale[event_VolumeLabel],
-                                                      Source={StaticResource PluginViewModel}}" />
-                            <TextBlock Width="60"
-                                       VerticalAlignment="Center"
-                                       Margin="3 0 0 0"
-                                       Height="27"
-                                       Padding="5"
-                                       Text="{Binding ElementName=TVolume,
-                                                      Path=Value,
-                                                      StringFormat=\{0:P2\}}" />
-                            <Button Margin="3 0 0 0"
-                                    Height="27"
-                                    Command="{Binding TestSoundCommand}"
-                                    Content="{Binding Locale[event_TestSoundButtonText],
-                                                      Source={StaticResource PluginViewModel}}"
-                                    DockPanel.Dock="Right" />
-                            <Slider x:Name="TVolume"
-                                    IsSnapToTickEnabled="True"
-                                    Maximum="1"
-                                    Minimum="0"
-                                    TickFrequency="0.025"
-                                    TickPlacement="BottomRight"
-                                    Value="1" />
-                        </DockPanel>
+                        <Grid Margin="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="33" />
+                                <RowDefinition Height="33" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <DockPanel Height="30" Margin="3 0 0 0" Grid.Column="0" Grid.Row="0">
+                                <TextBlock Padding="5"
+                                           Text="{Binding Locale[event_VolumeLabel],
+                                                          Source={StaticResource PluginViewModel}}" />
+                                <TextBlock Width="60"
+                                           VerticalAlignment="Center"
+                                           Margin="3 0 0 0"
+                                           Height="27"
+                                           Padding="5"
+                                           Text="{Binding ElementName=TVolume,
+                                                          Path=Value,
+                                                          StringFormat=\{0:P2\}}" />
+                                <Button Margin="3 0 0 0"
+                                        Height="27"
+                                        Command="{Binding TestSoundCommand}"
+                                        Content="{Binding Locale[event_TestSoundButtonText],
+                                                          Source={StaticResource PluginViewModel}}"
+                                        DockPanel.Dock="Right" />
+                                <Slider x:Name="TVolume"
+                                        IsSnapToTickEnabled="True"
+                                        Maximum="1"
+                                        Minimum="0"
+                                        TickFrequency="0.025"
+                                        TickPlacement="BottomRight"
+                                        Value="1" />
+                            </DockPanel>
+                            <DockPanel Height="30" Margin="3 0 0 0" Grid.Column="0" Grid.Row="1">
+                                <TextBlock Padding="5"
+                                           Text="Rate" />
+                                <TextBlock Width="60"
+                                           VerticalAlignment="Center"
+                                           Margin="3 0 0 0"
+                                           Height="27"
+                                           Padding="5"
+                                           Text="{Binding ElementName=TRate,
+                                                          Path=Value,
+                                                          StringFormat=\{0:N\}}" />
+                                <Slider x:Name="TRate"
+                                        IsSnapToTickEnabled="True"
+                                        Maximum="10"
+                                        Minimum="-10"
+                                        TickFrequency="1"
+                                        TickPlacement="BottomRight"
+                                        Value="-2" />
+                            </DockPanel>
+
+                        </Grid>
                     </DockPanel>
                 </Expander>
                 <Expander Header="{Binding Locale[event_ExecutableOptionsHeader],

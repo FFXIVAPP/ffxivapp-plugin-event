@@ -137,7 +137,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             }
             if (!string.IsNullOrWhiteSpace(MainView.View.TTTS.Text))
             {
-                TTSPlayer.Speak(MainView.View.TTTS.Text, volume);
+                TTSPlayer.Speak(MainView.View.TTTS.Text, volume, (int)MainView.View.TRate.Value);
             }
         }
 
@@ -180,6 +180,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 Sound = MainView.View.TSound.Text,
                 TTS = (MainView.View.TTTS.Text ?? "").Trim(),
+                Rate = (int)MainView.View.TRate.Value,
                 RegEx = MainView.View.TRegEx.Text,
                 Category = MainView.View.TCategory.Text,
                 Executable = MainView.View.TExecutable.Text,
@@ -257,6 +258,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             MainView.View.TSound.Text = GetValueBySelectedItem(MainView.View.Events, "Sound");
             MainView.View.TTTS.Text = GetValueBySelectedItem(MainView.View.Events, "TTS");
             MainView.View.TVolume.Value = Convert.ToDouble(GetValueBySelectedItem(MainView.View.Events, "Volume")) / 100;
+            MainView.View.TRate.Value = Convert.ToDouble(GetValueBySelectedItem(MainView.View.Events, "Rate"));
             MainView.View.TDelay.Text = GetValueBySelectedItem(MainView.View.Events, "Delay");
             MainView.View.TRegEx.Text = GetValueBySelectedItem(MainView.View.Events, "RegEx");
             MainView.View.TCategory.Text = GetValueBySelectedItem(MainView.View.Events, "Category");

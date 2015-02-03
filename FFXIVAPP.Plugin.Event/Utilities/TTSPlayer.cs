@@ -16,18 +16,24 @@ namespace FFXIVAPP.Plugin.Event.Utilities
     public static class TTSPlayer
     {
         private const int Latency = 100;
-        private static readonly ConcurrentDictionary<Tuple<string, int>, byte[]> Cached;
+        private static readonly ConcurrentDictionary<TTSData, byte[]> Cached;
 
         static TTSPlayer()
         {
-            Cached = new ConcurrentDictionary<Tuple<string, int>, byte[]>(new KeyEqualityComparer());
+            Cached = new ConcurrentDictionary<TTSData, byte[]>();
         }
 
-        public static void Speak(string tts, int volume)
+        public static void Speak(string tts, int volume, int rate)
         {
+            var ttsData = new TTSData
+                          {
+                              Text = tts,
+                              Volume = volume,
+                              Rate = rate
+                          };
             var disposable = new Disposable
                              {
-                                 MemoryStream = GetMemoryStream(tts, volume),
+                                 MemoryStream = GetMemoryStream(ttsData),
                                  DirectSoundOut = (Common.Constants.DefaultAudioDevice == Guid.Empty)
                                      ? new DirectSoundOut(Latency)
                                      : new DirectSoundOut(Common.Constants.DefaultAudioDevice, Latency),
@@ -39,24 +45,23 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             disposable.DirectSoundOut.Play();
         }
 
-        private static MemoryStream GetMemoryStream(string tts, int volume)
+        private static MemoryStream GetMemoryStream(TTSData ttsData)
         {
-            var tuple = new Tuple<string, int>(tts, volume);
-            var ttsData = Cached.GetOrAdd(tuple, t => CreateNewMemoryStream(t.Item1, t.Item2));
-            return new MemoryStream(ttsData);
+            var ttsBytes = Cached.GetOrAdd(ttsData, t => CreateNewMemoryStream(ttsData));
+            return new MemoryStream(ttsBytes);
         }
 
-        private static byte[] CreateNewMemoryStream(string tts, int volume)
+        private static byte[] CreateNewMemoryStream(TTSData ttsData)
         {
             using (var memstream = new MemoryStream())
             {
                 using (var synthesizer = new SpeechSynthesizer())
                 {
                     synthesizer.SetOutputToWaveStream(memstream);
-                    synthesizer.Volume = volume;
-                    synthesizer.Rate = -2;
+                    synthesizer.Volume = ttsData.Volume;
+                    synthesizer.Rate = ttsData.Rate;
 
-                    synthesizer.Speak(tts);
+                    synthesizer.Speak(ttsData.Text);
                 }
                 memstream.Seek(0, SeekOrigin.Begin);
                 return memstream.ToArray();
@@ -96,17 +101,46 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
         }
 
-        private class KeyEqualityComparer : IEqualityComparer<Tuple<string, int>>
+        private class TTSData : IEquatable<TTSData>
         {
-            public bool Equals(Tuple<string, int> x, Tuple<string, int> y)
+            public bool Equals(TTSData other)
             {
-                return x.Item2 == y.Item2
-                       && string.Equals(x.Item1, y.Item1, StringComparison.OrdinalIgnoreCase);
+                if (ReferenceEquals(null, other)) return false;
+                if (ReferenceEquals(this, other)) return true;
+                return string.Equals(Text, other.Text, StringComparison.OrdinalIgnoreCase) && Volume == other.Volume && Rate == other.Rate;
             }
 
-            public int GetHashCode(Tuple<string, int> obj)
+            public override bool Equals(object obj)
             {
-                return obj.GetHashCode();
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((TTSData) obj);
+            }
+
+            public override int GetHashCode()
+            {
+                return (Text == null) ? 0 : Text.GetHashCode();
+            }
+
+            public static bool operator ==(TTSData left, TTSData right)
+            {
+                return Equals(left, right);
+            }
+
+            public static bool operator !=(TTSData left, TTSData right)
+            {
+                return !Equals(left, right);
+            }
+
+            public string Text { get; set; }
+            public int Volume { get; set; }
+            public int Rate { get; set; }
+
+            public TTSData()
+            {
+                Rate = -2;
+                Volume = 100;
             }
         }
     }

@@ -267,6 +267,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
                 var xRegEx = item.RegEx;
                 var xSound = item.Sound;
                 var xTTS = item.TTS;
+                var xRate = item.Rate;
                 var xVolume = item.Volume;
                 var xDelay = item.Delay;
                 var xCategory = item.Category;
@@ -289,6 +290,11 @@ namespace FFXIVAPP.Plugin.Event.Properties
                     {
                         Key = "TTS",
                         Value = xTTS,
+                    },
+                    new XValuePair
+                    {
+                        Key = "Rate",
+                        Value = xRate.ToString(CultureInfo.InvariantCulture),
                     },
                     new XValuePair
                     {

@@ -97,7 +97,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                           {
                               PlaySound(logEvent, volume),
                               RunExecutable(logEvent, arguments),
-                              PlayTTS(tts, volume)
+                              PlayTTS(tts, volume, logEvent.Rate),
                           };
             actions.RemoveAll(a => a == null);
             if (!actions.Any())
@@ -147,14 +147,14 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             return () => ExecutableHelper.Run(logEvent.Executable, arguments);
         }
 
-        private static Action PlayTTS(string tts, int volume)
+        private static Action PlayTTS(string tts, int volume, int rate)
         {
             if (String.IsNullOrWhiteSpace(tts))
             {
                 return null;
             }
 
-            return () => TTSPlayer.Speak(tts, volume);
+            return () => TTSPlayer.Speak(tts, volume, rate);
         }
 
         private static void ExecuteActions(IEnumerable<Action> actions)

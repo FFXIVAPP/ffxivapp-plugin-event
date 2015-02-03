@@ -132,28 +132,32 @@
                                 <RowDefinition Height="33" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="250"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="250" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Grid.Row="0"
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
                                        Padding="5"
                                        Text="{Binding Locale[event_SoundLabel],
                                                       Source={StaticResource PluginViewModel}}" />
-                            <ComboBox Grid.Column="1" Grid.Row="0"
-                                      x:Name="TSound"
+                            <ComboBox x:Name="TSound"
+                                      Grid.Row="0"
+                                      Grid.Column="1"
                                       Width="Auto"
                                       Height="27"
                                       IsReadOnly="False"
                                       ItemsSource="{Binding SoundFiles,
                                                             Source={StaticResource PluginViewModel}}" />
-                            <TextBlock Grid.Column="0" Grid.Row="1"
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
                                        Padding="5"
-                                       Text="TTS" />
-                            <TextBox Grid.Column="1" Grid.Row="1"
-                                      x:Name="TTTS"
-                                      Width="Auto"
-                                      Height="27"
-                                      IsReadOnly="False" />
+                                       Text="TTS:" />
+                            <TextBox x:Name="TTTS"
+                                     Grid.Row="1"
+                                     Grid.Column="1"
+                                     Width="Auto"
+                                     Height="27"
+                                     IsReadOnly="False" />
                         </Grid>
                         <Grid Margin="3">
                             <Grid.RowDefinitions>
@@ -161,22 +165,25 @@
                                 <RowDefinition Height="33" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <DockPanel Height="30" Margin="3 0 0 0" Grid.Column="0" Grid.Row="0">
+                            <DockPanel Grid.Row="0"
+                                       Grid.Column="0"
+                                       Height="30"
+                                       Margin="3 0 0 0">
                                 <TextBlock Padding="5"
                                            Text="{Binding Locale[event_VolumeLabel],
                                                           Source={StaticResource PluginViewModel}}" />
                                 <TextBlock Width="60"
-                                           VerticalAlignment="Center"
-                                           Margin="3 0 0 0"
                                            Height="27"
+                                           Margin="3 0 0 0"
+                                           VerticalAlignment="Center"
                                            Padding="5"
                                            Text="{Binding ElementName=TVolume,
                                                           Path=Value,
                                                           StringFormat=\{0:P2\}}" />
-                                <Button Margin="3 0 0 0"
-                                        Height="27"
+                                <Button Height="27"
+                                        Margin="3 0 0 0"
                                         Command="{Binding TestSoundCommand}"
                                         Content="{Binding Locale[event_TestSoundButtonText],
                                                           Source={StaticResource PluginViewModel}}"
@@ -189,13 +196,16 @@
                                         TickPlacement="BottomRight"
                                         Value="1" />
                             </DockPanel>
-                            <DockPanel Height="30" Margin="3 0 0 0" Grid.Column="0" Grid.Row="1">
+                            <DockPanel Grid.Row="1"
+                                       Grid.Column="0"
+                                       Height="30"
+                                       Margin="3 0 0 0">
                                 <TextBlock Padding="5"
-                                           Text="Rate" />
+                                           Text="Rate:" />
                                 <TextBlock Width="60"
-                                           VerticalAlignment="Center"
-                                           Margin="3 0 0 0"
                                            Height="27"
+                                           Margin="3 0 0 0"
+                                           VerticalAlignment="Center"
                                            Padding="5"
                                            Text="{Binding ElementName=TRate,
                                                           Path=Value,
@@ -328,12 +338,20 @@
                                     Header="{Binding Locale[event_VolumeHeader],
                                                      Source={StaticResource PluginViewModel}}"
                                     IsReadOnly="True"
-                                    Utilities:GridViewSort.PropertyName="Sound" />
+                                    Utilities:GridViewSort.PropertyName="Volume" />
                 <DataGridTextColumn Binding="{Binding Executable}"
                                     Header="{Binding Locale[event_ExecutableHeader],
                                                      Source={StaticResource PluginViewModel}}"
                                     IsReadOnly="True"
                                     Utilities:GridViewSort.PropertyName="Executable" />
+                <DataGridTextColumn Binding="{Binding TTS}"
+                                    Header="TTS"
+                                    IsReadOnly="True"
+                                    Utilities:GridViewSort.PropertyName="TTS" />
+                <DataGridTextColumn Binding="{Binding Rate}"
+                                    Header="Rate"
+                                    IsReadOnly="True"
+                                    Utilities:GridViewSort.PropertyName="Rate" />
             </DataGrid.Columns>
         </DataGrid>
         <DockPanel Grid.Row="2"

@@ -54,11 +54,11 @@ namespace FFXIVAPP.Plugin.Event.Models
         private bool _enabled;
         private string _executable;
         private Guid _key;
+        private int _rate;
         private string _regEx;
         private string _sound;
-        private double _volume;
         private string _tts;
-        private int _rate;
+        private double _volume;
 
         public Guid Key
         {

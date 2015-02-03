@@ -29,23 +29,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Speech.Synthesis;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Timers;
-using System.Windows.Documents;
 using FFXIVAPP.Common.Core.Memory;
-using FFXIVAPP.Common.Core.Memory.Enums;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Properties;
-using NAudio.Wave;
 using NLog;
-using Timer = System.Timers.Timer;
 
 namespace FFXIVAPP.Plugin.Event.Utilities
 {
@@ -94,11 +87,11 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             var volume = Convert.ToInt32(logEvent.Volume * Settings.Default.GlobalVolume);
 
             var actions = new List<Action>
-                          {
-                              PlaySound(logEvent, volume),
-                              RunExecutable(logEvent, arguments),
-                              PlayTTS(tts, volume, logEvent.Rate),
-                          };
+            {
+                PlaySound(logEvent, volume),
+                RunExecutable(logEvent, arguments),
+                PlayTTS(tts, volume, logEvent.Rate),
+            };
             actions.RemoveAll(a => a == null);
             if (!actions.Any())
             {

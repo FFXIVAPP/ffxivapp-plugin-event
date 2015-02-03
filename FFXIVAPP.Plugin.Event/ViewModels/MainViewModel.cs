@@ -36,6 +36,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using FFXIVAPP.Common.Core.Memory;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.Models;
 using FFXIVAPP.Common.RegularExpressions;
@@ -130,14 +131,14 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         private static void TestSound()
         {
-            var volume = Convert.ToInt32((MainView.View.TVolume.Value*100)*Settings.Default.GlobalVolume);
+            var volume = Convert.ToInt32((MainView.View.TVolume.Value * 100) * Settings.Default.GlobalVolume);
             if (!string.IsNullOrWhiteSpace(MainView.View.TSound.Text))
             {
                 SoundPlayerHelper.PlayCached(MainView.View.TSound.Text, volume);
             }
             if (!string.IsNullOrWhiteSpace(MainView.View.TTTS.Text))
             {
-                TTSPlayer.Speak(MainView.View.TTTS.Text, volume, (int)MainView.View.TRate.Value);
+                TTSPlayer.Speak(MainView.View.TTTS.Text, volume, (int) MainView.View.TRate.Value);
             }
         }
 
@@ -180,7 +181,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 Sound = MainView.View.TSound.Text,
                 TTS = (MainView.View.TTTS.Text ?? "").Trim(),
-                Rate = (int)MainView.View.TRate.Value,
+                Rate = (int) MainView.View.TRate.Value,
                 RegEx = MainView.View.TRegEx.Text,
                 Category = MainView.View.TCategory.Text,
                 Executable = MainView.View.TExecutable.Text,

@@ -143,6 +143,8 @@ namespace FFXIVAPP.Plugin.Event
 
                     var xValue = xElement.GetElementValue("Value", string.Empty);
                     var xSound = xElement.GetElementValue("Sound", string.Empty);
+                    var xTTS = xElement.GetElementValue("TTS", string.Empty);
+                    var xRate = xElement.GetElementValue("Rate", -2);
                     var xVolume = xElement.GetElementValue("Volume", 1.0d);
                     var xDelay = xElement.GetElementValue("Delay", 0);
                     var xCategory = xElement.GetElementValue("Category", defaultCategory);
@@ -155,6 +157,8 @@ namespace FFXIVAPP.Plugin.Event
                     {
                         Key = xKey,
                         Sound = xSound,
+                        TTS = xTTS,
+                        Rate = xRate,
                         Delay = xDelay,
                         Volume = xVolume,
                         RegEx = xRegEx,

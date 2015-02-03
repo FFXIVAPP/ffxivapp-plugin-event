@@ -28,16 +28,24 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Speech.Synthesis;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Timers;
+using System.Windows.Documents;
 using FFXIVAPP.Common.Core.Memory;
+using FFXIVAPP.Common.Core.Memory.Enums;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Properties;
+using NAudio.Wave;
 using NLog;
+using Timer = System.Timers.Timer;
 
 namespace FFXIVAPP.Plugin.Event.Utilities
 {
@@ -52,6 +60,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 {
                     var resuccess = false;
                     var arguments = item.Arguments;
+                    var tts = item.TTS;
                     if (SharedRegEx.IsValidRegex(item.RegEx))
                     {
                         var reg = Regex.Match(line, item.RegEx);
@@ -59,6 +68,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                         {
                             resuccess = true;
                             arguments = reg.Result(item.Arguments);
+                            tts = reg.Result(tts);
                         }
                     }
                     else
@@ -69,8 +79,8 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                     {
                         continue;
                     }
-                    PlaySound(item);
-                    RunExecutable(item, arguments);
+
+                    ExecutLogEvent(item, arguments, tts);
                 }
             }
             catch (Exception ex)
@@ -79,60 +89,79 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
         }
 
-        private static void PlaySound(LogEvent logEvent)
+        private static void ExecutLogEvent(LogEvent logEvent, string arguments, string tts)
         {
-            var soundFile = logEvent.Sound;
-            if (String.IsNullOrWhiteSpace(soundFile))
+            var volume = Convert.ToInt32(logEvent.Volume * Settings.Default.GlobalVolume);
+
+            var actions = new List<Action>
+                          {
+                              PlaySound(logEvent, volume),
+                              RunExecutable(logEvent, arguments),
+                              PlayTTS(tts, volume, logEvent.Rate),
+                          };
+            actions.RemoveAll(a => a == null);
+            if (!actions.Any())
             {
                 return;
             }
 
-            var volume = logEvent.Volume * Settings.Default.GlobalVolume;
             var delay = logEvent.Delay;
             if (delay <= 0)
             {
-                SoundPlayerHelper.PlayCached(soundFile, (int) volume);
+                ExecuteActions(actions);
             }
             else
             {
-                var timer = new Timer(delay > 0 ? delay * 1000 : 1);
+                var timer = new Timer(delay * 1000);
                 ElapsedEventHandler timerEventHandler = null;
                 timerEventHandler = delegate
                 {
                     timer.Elapsed -= timerEventHandler;
                     timer.Dispose();
 
-                    SoundPlayerHelper.PlayCached(soundFile, (int) volume);
+                    ExecuteActions(actions);
                 };
                 timer.Elapsed += timerEventHandler;
                 timer.Start();
             }
         }
 
-        private static void RunExecutable(LogEvent logEvent, string arguments)
+        private static Action PlaySound(LogEvent logEvent, int volume)
+        {
+            var soundFile = logEvent.Sound;
+            if (String.IsNullOrWhiteSpace(soundFile))
+            {
+                return null;
+            }
+
+            return () => SoundPlayerHelper.PlayCached(soundFile, volume);
+        }
+
+        private static Action RunExecutable(LogEvent logEvent, string arguments)
         {
             if (String.IsNullOrWhiteSpace(logEvent.Executable))
             {
-                return;
+                return null;
             }
 
-            var delay = logEvent.Delay;
-            if (delay <= 0)
+            return () => ExecutableHelper.Run(logEvent.Executable, arguments);
+        }
+
+        private static Action PlayTTS(string tts, int volume, int rate)
+        {
+            if (String.IsNullOrWhiteSpace(tts))
             {
-                ExecutableHelper.Run(logEvent.Executable, arguments);
+                return null;
             }
-            else
+
+            return () => TTSPlayer.Speak(tts, volume, rate);
+        }
+
+        private static void ExecuteActions(IEnumerable<Action> actions)
+        {
+            foreach (var action in actions)
             {
-                var timer = new Timer(delay * 1000);
-                ElapsedEventHandler timerOnElapsed = null;
-                timerOnElapsed = delegate
-                {
-                    timer.Elapsed -= timerOnElapsed;
-                    timer.Dispose();
-                    ExecutableHelper.Run(logEvent.Executable, arguments);
-                };
-                timer.Elapsed += timerOnElapsed;
-                timer.Start();
+                action();
             }
         }
     }

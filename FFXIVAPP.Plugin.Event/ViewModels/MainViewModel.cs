@@ -43,6 +43,7 @@ using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Common.ViewModelBase;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Properties;
+using FFXIVAPP.Plugin.Event.Utilities;
 using FFXIVAPP.Plugin.Event.Views;
 using Microsoft.Win32;
 using NLog;
@@ -129,12 +130,15 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         private static void TestSound()
         {
-            if (MainView.View.TSound.Text.Trim() == "")
+            var volume = Convert.ToInt32((MainView.View.TVolume.Value*100)*Settings.Default.GlobalVolume);
+            if (!string.IsNullOrWhiteSpace(MainView.View.TSound.Text))
             {
-                return;
+                SoundPlayerHelper.PlayCached(MainView.View.TSound.Text, volume);
             }
-            var volume = (MainView.View.TVolume.Value * 100) * Settings.Default.GlobalVolume;
-            SoundPlayerHelper.PlayCached(MainView.View.TSound.Text, (int) volume);
+            if (!string.IsNullOrWhiteSpace(MainView.View.TTTS.Text))
+            {
+                TTSPlayer.Speak(MainView.View.TTTS.Text, volume, (int)MainView.View.TRate.Value);
+            }
         }
 
         /// <summary>
@@ -175,6 +179,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             var logEvent = new LogEvent
             {
                 Sound = MainView.View.TSound.Text,
+                TTS = (MainView.View.TTTS.Text ?? "").Trim(),
+                Rate = (int)MainView.View.TRate.Value,
                 RegEx = MainView.View.TRegEx.Text,
                 Category = MainView.View.TCategory.Text,
                 Executable = MainView.View.TExecutable.Text,
@@ -200,6 +206,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             }
             MainView.View.Events.UnselectAll();
             MainView.View.TRegEx.Text = "";
+            MainView.View.TTTS.Text = "";
             MainView.View.TExecutable.Text = "";
             MainView.View.TArguments.Text = "";
         }
@@ -249,7 +256,9 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 return;
             }
             MainView.View.TSound.Text = GetValueBySelectedItem(MainView.View.Events, "Sound");
+            MainView.View.TTTS.Text = GetValueBySelectedItem(MainView.View.Events, "TTS");
             MainView.View.TVolume.Value = Convert.ToDouble(GetValueBySelectedItem(MainView.View.Events, "Volume")) / 100;
+            MainView.View.TRate.Value = Convert.ToDouble(GetValueBySelectedItem(MainView.View.Events, "Rate"));
             MainView.View.TDelay.Text = GetValueBySelectedItem(MainView.View.Events, "Delay");
             MainView.View.TRegEx.Text = GetValueBySelectedItem(MainView.View.Events, "RegEx");
             MainView.View.TCategory.Text = GetValueBySelectedItem(MainView.View.Events, "Category");

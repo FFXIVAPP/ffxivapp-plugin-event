@@ -36,7 +36,6 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using FFXIVAPP.Common.Core.Memory;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.Models;
 using FFXIVAPP.Common.RegularExpressions;

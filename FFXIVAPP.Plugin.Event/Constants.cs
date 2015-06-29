@@ -45,7 +45,7 @@ namespace FFXIVAPP.Plugin.Event
 
         public static readonly string[] Supported =
         {
-            "ja", "fr", "en", "de"
+            "ja", "fr", "en", "de", "ru"
         };
 
         public static StringComparison InvariantComparer = StringComparison.InvariantCultureIgnoreCase;

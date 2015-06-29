@@ -1,4 +1,4 @@
-﻿// Sample.Plugin
+﻿// FFXIVAPP.Plugin.Event
 // LocaleHelper.cs
 // 
 // Copyright © 2007 - 2015 Ryan Wilson - All Rights Reserved
@@ -60,6 +60,9 @@ namespace FFXIVAPP.Plugin.Event.Helpers
                         break;
                     case "zh":
                         dictionary = Chinese.Context();
+                        break;
+                    case "ru":
+                        dictionary = Russian.Context();
                         break;
                     default:
                         dictionary = English.Context();

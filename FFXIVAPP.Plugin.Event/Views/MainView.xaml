@@ -151,7 +151,8 @@
                             <TextBlock Grid.Row="1"
                                        Grid.Column="0"
                                        Padding="5"
-                                       Text="TTS:" />
+                                       Text="{Binding Locale[event_TTSLabel],
+                                                      Source={StaticResource PluginViewModel}}" />
                             <TextBox x:Name="TTTS"
                                      Grid.Row="1"
                                      Grid.Column="1"
@@ -201,7 +202,8 @@
                                        Height="30"
                                        Margin="3 0 0 0">
                                 <TextBlock Padding="5"
-                                           Text="Rate:" />
+                                           Text="{Binding Locale[event_RateLabel],
+                                                          Source={StaticResource PluginViewModel}}" />
                                 <TextBlock Width="60"
                                            Height="27"
                                            Margin="3 0 0 0"
@@ -243,16 +245,9 @@
                                                     Source={StaticResource PluginViewModel}}" />
                         </DockPanel>
                         <DockPanel Dock="Bottom">
-                            <!--
-                                TODO: when localization is completed for aguments, use this line:
-                                <TextBlock Padding="5"
-                                Text="{Binding Locale[event_ArgumentsLabel],
-                                Source={StaticResource PluginViewModel}}" DockPanel.Dock="Left" />
-                            -->
-                            <TextBlock DockPanel.Dock="Left"
-                                       Padding="5"
-                                       Text="Arguments:" />
-
+                            <TextBlock Padding="5"
+                                     Text="{Binding Locale[event_ArgumentsLabel],
+                                     Source={StaticResource PluginViewModel}}" DockPanel.Dock="Left" />
                             <TextBox x:Name="TArguments"
                                      DockPanel.Dock="Left"
                                      Text="" />
@@ -345,11 +340,13 @@
                                     IsReadOnly="True"
                                     Utilities:GridViewSort.PropertyName="Executable" />
                 <DataGridTextColumn Binding="{Binding TTS}"
-                                    Header="TTS"
+                                    Header="{Binding Locale[event_TTSHeader],
+                                                     Source={StaticResource PluginViewModel}}"
                                     IsReadOnly="True"
                                     Utilities:GridViewSort.PropertyName="TTS" />
                 <DataGridTextColumn Binding="{Binding Rate}"
-                                    Header="Rate"
+                                    Header="{Binding Locale[event_RateHeader],
+                                                     Source={StaticResource PluginViewModel}}"
                                     IsReadOnly="True"
                                     Utilities:GridViewSort.PropertyName="Rate" />
             </DataGrid.Columns>

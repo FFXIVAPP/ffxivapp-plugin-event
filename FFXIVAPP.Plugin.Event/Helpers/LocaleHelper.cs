@@ -1,4 +1,4 @@
-﻿// Sample.Plugin
+﻿// FFXIVAPP.Plugin.Event
 // LocaleHelper.cs
 // 
 // Copyright © 2007 - 2015 Ryan Wilson - All Rights Reserved

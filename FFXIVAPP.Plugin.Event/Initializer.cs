@@ -200,7 +200,7 @@ namespace FFXIVAPP.Plugin.Event
 
         private static T DeserializeValue<T>(string value, T defaultValue)
         {
-            if (string.IsNullOrEmpty(value))
+            if (String.IsNullOrEmpty(value))
             {
                 return defaultValue;
             }

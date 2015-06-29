@@ -66,6 +66,11 @@ namespace FFXIVAPP.Plugin.Event.Localization
             Dictionary.Add("event_SoundOptionsHeader", "Sound Options");
             Dictionary.Add("event_ExecutableOptionsHeader", "Executable Options");
             Dictionary.Add("event_GlobalVolumeHeader", "Volume global");
+            Dictionary.Add("event_TTSHeader", "TTS");
+            Dictionary.Add("event_RateHeader", "Rate");
+            Dictionary.Add("event_TTSLabel", "TTS");
+            Dictionary.Add("event_RateLabel", "Rate");
+            Dictionary.Add("event_ArgumentsLabel", "Arguments");
             return Dictionary;
         }
     }

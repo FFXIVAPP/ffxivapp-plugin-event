@@ -39,33 +39,14 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 {
     internal sealed class SettingsViewModel : INotifyPropertyChanged
     {
-        #region Property Bindings
-
-        private static SettingsViewModel _instance;
-
-        public static SettingsViewModel Instance
-        {
-            get { return _instance ?? (_instance = new SettingsViewModel()); }
-        }
-
-        #endregion
-
-        #region Declarations
-
-        public ICommand TestSoundCommand { get; private set; }
-
-        #endregion
-
         public SettingsViewModel()
         {
             TestSoundCommand = new DelegateCommand(TestSound);
         }
 
-        #region Loading Functions
+        #region Declarations
 
-        #endregion
-
-        #region Utility Functions
+        public ICommand TestSoundCommand { get; private set; }
 
         #endregion
 
@@ -80,6 +61,25 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             var volume = Settings.Default.GlobalVolume * 100;
             SoundPlayerHelper.PlayCached(SettingsView.View.TSound.Text, (int) volume);
         }
+
+        #endregion
+
+        #region Property Bindings
+
+        private static SettingsViewModel _instance;
+
+        public static SettingsViewModel Instance
+        {
+            get { return _instance ?? (_instance = new SettingsViewModel()); }
+        }
+
+        #endregion
+
+        #region Loading Functions
+
+        #endregion
+
+        #region Utility Functions
 
         #endregion
 

@@ -43,10 +43,6 @@ namespace FFXIVAPP.Plugin.Event
 {
     internal static class Initializer
     {
-        #region Declarations
-
-        #endregion
-
         public static void LoadSettings()
         {
             if (Constants.XSettings != null)
@@ -165,7 +161,7 @@ namespace FFXIVAPP.Plugin.Event
                         Category = xCategory,
                         Enabled = xEnabled,
                         Executable = xExecutable,
-                        Arguments = xArguments,
+                        Arguments = xArguments
                     };
                     var found = PluginViewModel.Instance.Events.Any(@event => @event.Key == logEvent.Key);
                     if (!found)
@@ -219,5 +215,9 @@ namespace FFXIVAPP.Plugin.Event
         {
             MainViewModel.SetupGrouping();
         }
+
+        #region Declarations
+
+        #endregion
     }
 }

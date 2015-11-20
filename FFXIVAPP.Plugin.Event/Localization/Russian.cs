@@ -2,7 +2,6 @@
 // Russian.cs
 // 
 // Copyright © 2007 - 2015 Ryan Wilson - All Rights Reserved
-// Modified by Yaguar666 ak Yaguar Kuro
 // 
 // Redistribution and use in source and binary forms, with or without 
 // modification, are permitted provided that the following conditions are met: 

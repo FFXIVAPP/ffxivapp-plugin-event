@@ -56,7 +56,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             var disposable = new Disposable
             {
                 MemoryStream = GetMemoryStream(ttsData),
-                DirectSoundOut = (Common.Constants.DefaultAudioDevice == Guid.Empty) ? new DirectSoundOut(Latency) : new DirectSoundOut(Common.Constants.DefaultAudioDevice, Latency),
+                DirectSoundOut = (Common.Constants.DefaultAudioDevice == Guid.Empty) ? new DirectSoundOut(Latency) : new DirectSoundOut(Common.Constants.DefaultAudioDevice, Latency)
             };
             disposable.WaveFileReader = new WaveFileReader(disposable.MemoryStream);
             disposable.WaveChannel = new WaveChannel32(disposable.WaveFileReader);

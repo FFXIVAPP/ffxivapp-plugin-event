@@ -48,7 +48,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 var processStartInfo = new ProcessStartInfo
                 {
                     Arguments = (string.IsNullOrWhiteSpace(arguments) ? "" : arguments),
-                    FileName = path,
+                    FileName = path
                 };
                 using (Process.Start(processStartInfo))
                 {

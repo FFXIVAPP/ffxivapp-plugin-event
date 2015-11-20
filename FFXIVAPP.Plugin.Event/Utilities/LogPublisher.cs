@@ -90,7 +90,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             {
                 PlaySound(logEvent, volume),
                 RunExecutable(logEvent, arguments),
-                PlayTTS(tts, volume, logEvent.Rate),
+                PlayTTS(tts, volume, logEvent.Rate)
             };
             actions.RemoveAll(a => a == null);
             if (!actions.Any())

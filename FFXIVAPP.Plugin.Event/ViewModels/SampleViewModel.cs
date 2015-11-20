@@ -36,6 +36,12 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 {
     internal sealed class SampleViewModel : INotifyPropertyChanged
     {
+        public SampleViewModel()
+        {
+            SampleCommand = new DelegateCommand(Sample);
+            SampleCommandT = new DelegateCommand<object>(SampleT);
+        }
+
         #region Property Bindings
 
         private static SampleViewModel _instance;
@@ -53,12 +59,6 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         public ICommand SampleCommandT { get; private set; }
 
         #endregion
-
-        public SampleViewModel()
-        {
-            SampleCommand = new DelegateCommand(Sample);
-            SampleCommandT = new DelegateCommand<object>(SampleT);
-        }
 
         #region Loading Functions
 

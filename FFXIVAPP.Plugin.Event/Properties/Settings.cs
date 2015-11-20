@@ -293,12 +293,12 @@ namespace FFXIVAPP.Plugin.Event.Properties
                     new XValuePair
                     {
                         Key = "TTS",
-                        Value = xTTS,
+                        Value = xTTS
                     },
                     new XValuePair
                     {
                         Key = "Rate",
-                        Value = xRate.ToString(CultureInfo.InvariantCulture),
+                        Value = xRate.ToString(CultureInfo.InvariantCulture)
                     },
                     new XValuePair
                     {

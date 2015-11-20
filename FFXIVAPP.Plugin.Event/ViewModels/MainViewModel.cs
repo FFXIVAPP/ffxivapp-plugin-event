@@ -52,6 +52,44 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 {
     internal sealed class MainViewModel : INotifyPropertyChanged
     {
+        public MainViewModel()
+        {
+            RefreshSoundListCommand = new DelegateCommand(RefreshSoundList);
+            TestSoundCommand = new DelegateCommand(TestSound);
+            AddOrUpdateEventCommand = new DelegateCommand(AddOrUpdateEvent);
+            DeleteEventCommand = new DelegateCommand(DeleteEvent);
+            EventSelectionCommand = new DelegateCommand(EventSelection);
+            DeleteCategoryCommand = new DelegateCommand<string>(DeleteCategory);
+            ToggleCategoryCommand = new DelegateCommand<string>(ToggleCategory);
+            SelectExecutableCommand = new DelegateCommand(SelectExecutable);
+        }
+
+        public static void SetupGrouping()
+        {
+            var cvEvents = CollectionViewSource.GetDefaultView(MainView.View.Events.ItemsSource);
+            if (cvEvents != null && cvEvents.CanGroup)
+            {
+                cvEvents.GroupDescriptions.Clear();
+                cvEvents.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
+            }
+        }
+
+        #region Utility Functions
+
+        /// <summary>
+        /// </summary>
+        /// <param name="listView"> </param>
+        /// <param name="key"> </param>
+        private static string GetValueBySelectedItem(Selector listView, string key)
+        {
+            var type = listView.SelectedItem.GetType();
+            var property = type.GetProperty(key);
+            return property.GetValue(listView.SelectedItem, null)
+                           .ToString();
+        }
+
+        #endregion
+
         #region Property Bindings
 
         private static MainViewModel _instance;
@@ -76,45 +114,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         #endregion
 
-        public MainViewModel()
-        {
-            RefreshSoundListCommand = new DelegateCommand(RefreshSoundList);
-            TestSoundCommand = new DelegateCommand(TestSound);
-            AddOrUpdateEventCommand = new DelegateCommand(AddOrUpdateEvent);
-            DeleteEventCommand = new DelegateCommand(DeleteEvent);
-            EventSelectionCommand = new DelegateCommand(EventSelection);
-            DeleteCategoryCommand = new DelegateCommand<string>(DeleteCategory);
-            ToggleCategoryCommand = new DelegateCommand<string>(ToggleCategory);
-            SelectExecutableCommand = new DelegateCommand(SelectExecutable);
-        }
-
-        public static void SetupGrouping()
-        {
-            var cvEvents = CollectionViewSource.GetDefaultView(MainView.View.Events.ItemsSource);
-            if (cvEvents != null && cvEvents.CanGroup == true)
-            {
-                cvEvents.GroupDescriptions.Clear();
-                cvEvents.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
-            }
-        }
-
         #region Loading Functions
-
-        #endregion
-
-        #region Utility Functions
-
-        /// <summary>
-        /// </summary>
-        /// <param name="listView"> </param>
-        /// <param name="key"> </param>
-        private static string GetValueBySelectedItem(Selector listView, string key)
-        {
-            var type = listView.SelectedItem.GetType();
-            var property = type.GetProperty(key);
-            return property.GetValue(listView.SelectedItem, null)
-                           .ToString();
-        }
 
         #endregion
 

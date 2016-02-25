@@ -1,6 +1,6 @@
 ﻿// FFXIVAPP.Plugin.Event ~ TTSPlayer.cs
 // 
-// Copyright © 2007 - 2015 Ryan Wilson - All Rights Reserved
+// Copyright © 2007 - 2016 Ryan Wilson - All Rights Reserved
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 Volume = 100;
             }
 
-            public string Text { get; }
+            public string Text { get; set; }
             public int Volume { get; set; }
             public int Rate { get; set; }
 

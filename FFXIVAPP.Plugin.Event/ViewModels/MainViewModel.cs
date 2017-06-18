@@ -1,6 +1,6 @@
 ﻿// FFXIVAPP.Plugin.Event ~ MainViewModel.cs
 // 
-// Copyright © 2007 - 2016 Ryan Wilson - All Rights Reserved
+// Copyright © 2007 - 2017 Ryan Wilson - All Rights Reserved
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -262,7 +262,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 return;
             }
-            var name = matches.Groups["category"].Value;
+            var name = matches.Groups["category"]
+                              .Value;
             var events = new List<LogEvent>(PluginViewModel.Instance.Events.ToList());
             foreach (var @event in events.Where(@event => @event.Category == name))
             {
@@ -279,7 +280,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 return;
             }
             MainView.View.Events.SelectedItem = null;
-            var category = matches.Groups["category"].Value;
+            var category = matches.Groups["category"]
+                                  .Value;
             var events = new List<LogEvent>(PluginViewModel.Instance.Events.ToList());
             var enabledCount = events.Where(@event => @event.Category == category)
                                      .Count(@event => @event.Enabled);
@@ -288,9 +290,11 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 for (var i = 0; i < events.Count; i++)
                 {
-                    if (events[i].Category == category)
+                    if (events[i]
+                            .Category == category)
                     {
-                        PluginViewModel.Instance.Events[i].Enabled = true;
+                        PluginViewModel.Instance.Events[i]
+                                       .Enabled = true;
                     }
                 }
             }
@@ -298,9 +302,11 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 for (var i = 0; i < events.Count; i++)
                 {
-                    if (events[i].Category == category)
+                    if (events[i]
+                            .Category == category)
                     {
-                        PluginViewModel.Instance.Events[i].Enabled = false;
+                        PluginViewModel.Instance.Events[i]
+                                       .Enabled = false;
                     }
                 }
             }

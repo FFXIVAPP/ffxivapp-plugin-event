@@ -1,25 +1,25 @@
 ﻿{
-    "PluginInfo": {
-        "Name": "FFXIVAPP.Plugin.Event",
-        "Version": "3.0.6134.35659",
-        "Files": [
-            {
-                "Name": "FFXIVAPP.Plugin.Event.dll",
-                "Location": ""
-            },
-            {
-                "Name": "Logo.png",
-                "Location": ""
-            },
-            {
-                "Name": "PluginInfo.xml",
-                "Location": ""
-            },
-            {
-                "Name": "aruba.wav",
-                "Location": ""
-            }
-        ],
-		"SourceURI": "https://github.com/Icehunter/ffxivapp-plugin-event/raw/master/distribution/"
-    }
+  "PluginInfo": {
+    "Name": "FFXIVAPP.Plugin.Event",
+    "Version": "3.0.6377.38478",
+    "Files": [
+      {
+        "Name": "FFXIVAPP.Plugin.Event.dll",
+        "Location": ""
+      },
+      {
+        "Name": "Logo.png",
+        "Location": ""
+      },
+      {
+        "Name": "PluginInfo.xml",
+        "Location": ""
+      },
+      {
+        "Name": "aruba.wav",
+        "Location": ""
+      }
+    ],
+    "SourceURI": "https://github.com/Icehunter/ffxivapp-plugin-event/raw/master/distribution/"
+  }
 }

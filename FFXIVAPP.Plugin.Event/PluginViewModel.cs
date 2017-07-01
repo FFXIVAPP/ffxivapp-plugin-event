@@ -73,7 +73,7 @@ namespace FFXIVAPP.Plugin.Event
                 return pluginInfo;
             }
         }
-
+        
         public bool EnableHelpLabels
         {
             get { return _enableHelpLabels; }

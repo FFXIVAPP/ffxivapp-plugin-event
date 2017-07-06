@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Timers;
 using FFXIVAPP.Common.Helpers;
+using FFXIVAPP.Common.Models;
 using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Memory.Core;
@@ -32,6 +33,12 @@ namespace FFXIVAPP.Plugin.Event.Utilities
 {
     public static class LogPublisher
     {
+        #region Logger
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        #endregion
+
         public static void Process(ChatLogEntry chatLogEntry)
         {
             try
@@ -54,7 +61,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                     }
                     else
                     {
-                        resuccess = (item.RegEx == line);
+                        resuccess = item.RegEx == line;
                     }
                     if (!resuccess)
                     {
@@ -66,7 +73,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
             catch (Exception ex)
             {
-                Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
+                Logging.Log(Logger, new LogItem(ex, true));
             }
         }
 

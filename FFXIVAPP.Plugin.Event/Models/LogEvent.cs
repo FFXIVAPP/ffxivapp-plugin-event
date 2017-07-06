@@ -27,10 +27,10 @@ namespace FFXIVAPP.Plugin.Event.Models
         {
             Delay = 0;
             Enabled = true;
-            Executable = "";
-            Sound = "";
+            Executable = string.Empty;
+            Sound = string.Empty;
             Volume = 100;
-            TTS = "";
+            TTS = string.Empty;
             Rate = -2;
         }
 

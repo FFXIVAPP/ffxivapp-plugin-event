@@ -23,14 +23,23 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using FFXIVAPP.Common.Helpers;
+using FFXIVAPP.Common.Models;
+using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Properties;
 using FFXIVAPP.Plugin.Event.ViewModels;
+using NLog;
 
 namespace FFXIVAPP.Plugin.Event
 {
     internal static class Initializer
     {
+        #region Logger
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        #endregion
+
         public static void LoadSettings()
         {
             if (Constants.XSettings != null)
@@ -79,15 +88,15 @@ namespace FFXIVAPP.Plugin.Event
                 {
                     continue;
                 }
-                var baseKey = legacyFile.DirectoryName.Replace(Constants.BaseDirectory, "");
-                var key = String.IsNullOrWhiteSpace(baseKey) ? legacyFile.Name : String.Format("{0}\\{1}", baseKey.Substring(1), legacyFile.Name);
+                var baseKey = legacyFile.DirectoryName.Replace(Constants.BaseDirectory, string.Empty);
+                var key = String.IsNullOrWhiteSpace(baseKey) ? legacyFile.Name : $"{baseKey.Substring(1)}\\{legacyFile.Name}";
                 if (File.Exists(Path.Combine(Common.Constants.SoundsPath, key)))
                 {
                     continue;
                 }
                 try
                 {
-                    var directoryKey = String.IsNullOrWhiteSpace(baseKey) ? "" : baseKey.Substring(1);
+                    var directoryKey = String.IsNullOrWhiteSpace(baseKey) ? string.Empty : baseKey.Substring(1);
                     var directory = Path.Combine(Common.Constants.SoundsPath, directoryKey);
                     if (!Directory.Exists(directory))
                     {
@@ -98,6 +107,7 @@ namespace FFXIVAPP.Plugin.Event
                 }
                 catch (Exception ex)
                 {
+                    Logging.Log(Logger, new LogItem(ex, true));
                 }
             }
             foreach (var cachedSoundFile in SoundPlayerHelper.SoundFileKeys())

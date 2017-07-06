@@ -25,6 +25,12 @@ namespace FFXIVAPP.Plugin.Event.Utilities
 {
     public static class ExecutableHelper
     {
+        #region Logger
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        #endregion
+
         public static void Run(string path, string arguments)
         {
             if (String.IsNullOrWhiteSpace(path) || !File.Exists(path))
@@ -35,7 +41,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             {
                 var processStartInfo = new ProcessStartInfo
                 {
-                    Arguments = (string.IsNullOrWhiteSpace(arguments) ? "" : arguments),
+                    Arguments = string.IsNullOrWhiteSpace(arguments) ? string.Empty : arguments,
                     FileName = path
                 };
                 using (Process.Start(processStartInfo))
@@ -45,7 +51,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
             catch (Exception ex)
             {
-                Logging.Log(LogManager.GetCurrentClassLogger(), "Executable failed.", ex);
+                Logging.Log(Logger, "Executable Failed", ex);
             }
         }
     }

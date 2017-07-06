@@ -78,7 +78,7 @@ namespace FFXIVAPP.Plugin.Event
                         _xSettings = found ? XDocument.Load(legacyFile) : ResourceHelper.XDocResource(LibraryPack + "/Defaults/Settings.xml");
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     _xSettings = ResourceHelper.XDocResource(LibraryPack + "/Defaults/Settings.xml");
                 }

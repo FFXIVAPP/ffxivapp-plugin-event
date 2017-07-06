@@ -42,7 +42,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         private static void TestSound()
         {
-            if (SettingsView.View.TSound.Text.Trim() == "")
+            if (SettingsView.View.TSound.Text.Trim() == string.Empty)
             {
                 return;
             }

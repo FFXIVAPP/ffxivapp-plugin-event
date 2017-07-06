@@ -40,6 +40,12 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 {
     internal sealed class MainViewModel : INotifyPropertyChanged
     {
+        #region Logger
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        #endregion
+
         public MainViewModel()
         {
             RefreshSoundListCommand = new DelegateCommand(RefreshSoundList);
@@ -118,7 +124,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         private static void TestSound()
         {
-            var volume = Convert.ToInt32((MainView.View.TVolume.Value * 100) * Settings.Default.GlobalVolume);
+            var volume = Convert.ToInt32(MainView.View.TVolume.Value * 100 * Settings.Default.GlobalVolume);
             if (!string.IsNullOrWhiteSpace(MainView.View.TSound.Text))
             {
                 SoundPlayerHelper.PlayCached(MainView.View.TSound.Text, volume);
@@ -143,7 +149,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             }
             catch (Exception ex)
             {
-                Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
+                Logging.Log(Logger, new LogItem(ex, true));
             }
             if (string.IsNullOrWhiteSpace(MainView.View.TDelay.Text) || string.IsNullOrWhiteSpace(MainView.View.TRegEx.Text))
             {
@@ -167,7 +173,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             var logEvent = new LogEvent
             {
                 Sound = MainView.View.TSound.Text,
-                TTS = (MainView.View.TTTS.Text ?? "").Trim(),
+                TTS = (MainView.View.TTTS.Text ?? string.Empty).Trim(),
                 Rate = (int) MainView.View.TRate.Value,
                 RegEx = MainView.View.TRegEx.Text,
                 Category = MainView.View.TCategory.Text,
@@ -193,10 +199,10 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 PluginViewModel.Instance.Events[index] = logEvent;
             }
             MainView.View.Events.UnselectAll();
-            MainView.View.TRegEx.Text = "";
-            MainView.View.TTTS.Text = "";
-            MainView.View.TExecutable.Text = "";
-            MainView.View.TArguments.Text = "";
+            MainView.View.TRegEx.Text = string.Empty;
+            MainView.View.TTTS.Text = string.Empty;
+            MainView.View.TExecutable.Text = string.Empty;
+            MainView.View.TArguments.Text = string.Empty;
         }
 
         /// <summary>
@@ -210,7 +216,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             }
             catch (Exception ex)
             {
-                Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
+                Logging.Log(Logger, new LogItem(ex, true));
                 return;
             }
             var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Key.ToString() != selectedKey)
@@ -285,7 +291,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             var events = new List<LogEvent>(PluginViewModel.Instance.Events.ToList());
             var enabledCount = events.Where(@event => @event.Category == category)
                                      .Count(@event => @event.Enabled);
-            var enable = enabledCount == 0 || (enabledCount < events.Count(@event => @event.Category == category));
+            var enable = enabledCount == 0 || enabledCount < events.Count(@event => @event.Category == category);
             if (enable)
             {
                 for (var i = 0; i < events.Count; i++)

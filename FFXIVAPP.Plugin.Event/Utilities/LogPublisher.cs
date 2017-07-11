@@ -24,10 +24,10 @@ using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.Models;
 using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
-using FFXIVAPP.Memory.Core;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Properties;
 using NLog;
+using Sharlayan.Core;
 
 namespace FFXIVAPP.Plugin.Event.Utilities
 {

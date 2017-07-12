@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -32,11 +33,11 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         #region Property Bindings
 
-        private static SampleViewModel _instance;
+        private static Lazy<SampleViewModel> _instance = new Lazy<SampleViewModel>(() => new SampleViewModel());
 
         public static SampleViewModel Instance
         {
-            get { return _instance ?? (_instance = new SampleViewModel()); }
+            get { return _instance.Value; }
         }
 
         #endregion

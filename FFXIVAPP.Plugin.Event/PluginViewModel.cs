@@ -39,7 +39,7 @@ namespace FFXIVAPP.Plugin.Event
 
         #region Property Bindings
 
-        private static PluginViewModel _instance;
+        private static Lazy<PluginViewModel> _instance = new Lazy<PluginViewModel>(() => new PluginViewModel());
         private bool _enableHelpLabels;
         private ObservableCollection<LogEvent> _events;
         private Dictionary<string, string> _locale;
@@ -47,7 +47,7 @@ namespace FFXIVAPP.Plugin.Event
 
         public static PluginViewModel Instance
         {
-            get { return _instance ?? (_instance = new PluginViewModel()); }
+            get { return _instance.Value; }
         }
 
         public Dictionary<string, string> Locale

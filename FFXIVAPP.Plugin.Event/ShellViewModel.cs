@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -44,11 +45,11 @@ namespace FFXIVAPP.Plugin.Event
 
         #region Property Bindings
 
-        private static ShellViewModel _instance;
+        private static Lazy<ShellViewModel> _instance = new Lazy<ShellViewModel>(() => new ShellViewModel());
 
         public static ShellViewModel Instance
         {
-            get { return _instance ?? (_instance = new ShellViewModel()); }
+            get { return _instance.Value; }
         }
 
         #endregion

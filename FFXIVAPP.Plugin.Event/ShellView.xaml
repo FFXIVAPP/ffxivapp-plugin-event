@@ -6,39 +6,34 @@
              xmlns:Properties="clr-namespace:FFXIVAPP.Plugin.Event.Properties"
              xmlns:Views="clr-namespace:FFXIVAPP.Plugin.Event.Views"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             Loaded="ShellView_OnLoaded"
              d:DesignHeight="300"
              d:DesignWidth="300"
+             Loaded="ShellView_OnLoaded"
              mc:Ignorable="d">
 
     <UserControl.Resources>
         <Converters:VisibilityConverter x:Key="VisibilityConverter" />
-        <x:Static x:Key="PluginViewModel"
-                  Member="Plugin:PluginViewModel.Instance" />
-        <x:Static x:Key="ShellViewModel"
-                  Member="Plugin:ShellViewModel.Instance" />
+        <x:Static x:Key="PluginViewModel" Member="Plugin:PluginViewModel.Instance" />
+        <x:Static x:Key="ShellViewModel" Member="Plugin:ShellViewModel.Instance" />
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot"
-          DataContext="{StaticResource ShellViewModel}">
-        <TabControl x:Name="ShellViewTC"
-                    TabStripPlacement="Right">
+    <Grid x:Name="LayoutRoot" DataContext="{StaticResource ShellViewModel}">
+        <TabControl x:Name="ShellViewTC" TabStripPlacement="Right">
             <TabItem x:Name="MainTI">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="20"
-                               Height="20"
-                               RenderOptions.BitmapScalingMode="HighQuality"
-                               Source="/FFXIVAPP.Plugin.Event;component/Media/Images/Main.png"
-                               ToolTip="{Binding Locale[app_MainToolTip],
-                                                 Source={StaticResource PluginViewModel}}" />
+                        <Border Padding="4"
+                                Background="White"
+                                BorderBrush="#FF000000"
+                                BorderThickness="1,1,1,1"
+                                CornerRadius="15">
+                            <iconPacks:PackIconFontAwesome Kind="Home" ToolTip="{Binding Locale[app_MainToolTip], Source={StaticResource PluginViewModel}}" />
+                        </Border>
                         <TextBlock Padding="5"
-                                   Text="{Binding Locale[app_MainToolTip],
-                                                  Source={StaticResource PluginViewModel}}"
-                                   Visibility="{Binding EnableHelpLabels,
-                                                        Source={StaticResource PluginViewModel},
-                                                        Converter={StaticResource VisibilityConverter}}" />
+                                   Text="{Binding Locale[app_MainToolTip], Source={StaticResource PluginViewModel}}"
+                                   Visibility="{Binding EnableHelpLabels, Source={StaticResource PluginViewModel}, Converter={StaticResource VisibilityConverter}}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Views:MainView />
@@ -46,18 +41,16 @@
             <TabItem x:Name="SettingsTI">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="20"
-                               Height="20"
-                               RenderOptions.BitmapScalingMode="HighQuality"
-                               Source="/FFXIVAPP.Plugin.Event;component/Media/Images/Settings.png"
-                               ToolTip="{Binding Locale[app_SettingsToolTip],
-                                                 Source={StaticResource PluginViewModel}}" />
+                        <Border Padding="4"
+                                Background="White"
+                                BorderBrush="#FF000000"
+                                BorderThickness="1,1,1,1"
+                                CornerRadius="15">
+                            <iconPacks:PackIconFontAwesome Kind="Cog" ToolTip="{Binding Locale[app_SettingsToolTip], Source={StaticResource PluginViewModel}}" />
+                        </Border>
                         <TextBlock Padding="5"
-                                   Text="{Binding Locale[app_SettingsToolTip],
-                                                  Source={StaticResource PluginViewModel}}"
-                                   Visibility="{Binding EnableHelpLabels,
-                                                        Source={StaticResource PluginViewModel},
-                                                        Converter={StaticResource VisibilityConverter}}" />
+                                   Text="{Binding Locale[app_SettingsToolTip], Source={StaticResource PluginViewModel}}"
+                                   Visibility="{Binding EnableHelpLabels, Source={StaticResource PluginViewModel}, Converter={StaticResource VisibilityConverter}}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Views:SettingsView />
@@ -65,18 +58,16 @@
             <TabItem x:Name="AboutTI">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="20"
-                               Height="20"
-                               RenderOptions.BitmapScalingMode="HighQuality"
-                               Source="/FFXIVAPP.Plugin.Event;component/Media/Images/About.png"
-                               ToolTip="{Binding Locale[app_AboutToolTip],
-                                                 Source={StaticResource PluginViewModel}}" />
+                        <Border Padding="4"
+                                Background="White"
+                                BorderBrush="#FF000000"
+                                BorderThickness="1,1,1,1"
+                                CornerRadius="15">
+                            <iconPacks:PackIconFontAwesome Kind="Info" ToolTip="{Binding Locale[app_AboutToolTip], Source={StaticResource PluginViewModel}}" />
+                        </Border>
                         <TextBlock Padding="5"
-                                   Text="{Binding Locale[app_AboutToolTip],
-                                                  Source={StaticResource PluginViewModel}}"
-                                   Visibility="{Binding EnableHelpLabels,
-                                                        Source={StaticResource PluginViewModel},
-                                                        Converter={StaticResource VisibilityConverter}}" />
+                                   Text="{Binding Locale[app_AboutToolTip], Source={StaticResource PluginViewModel}}"
+                                   Visibility="{Binding EnableHelpLabels, Source={StaticResource PluginViewModel}, Converter={StaticResource VisibilityConverter}}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Views:AboutView />

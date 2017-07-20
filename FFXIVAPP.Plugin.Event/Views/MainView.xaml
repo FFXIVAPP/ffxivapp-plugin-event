@@ -8,31 +8,28 @@
              xmlns:ViewModels="clr-namespace:FFXIVAPP.Plugin.Event.ViewModels"
              xmlns:converters="clr-namespace:FFXIVAPP.Plugin.Event.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <x:Static x:Key="MainViewModel"
-                  Member="ViewModels:MainViewModel.Instance" />
-        <x:Static x:Key="PluginViewModel"
-                  Member="Plugin:PluginViewModel.Instance" />
-        <x:Static x:Key="Settings"
-                  Member="Properties:Settings.Default" />
+        <x:Static x:Key="MainViewModel" Member="ViewModels:MainViewModel.Instance" />
+        <x:Static x:Key="PluginViewModel" Member="Plugin:PluginViewModel.Instance" />
+        <x:Static x:Key="Settings" Member="Properties:Settings.Default" />
         <Converters:VisibilityConverter x:Key="VisibilityConverter" />
         <converters:NameMultiValueConverter x:Key="NameMultiValueConverter" />
         <DataTemplate x:Key="EventHeaderTemplate">
             <StackPanel Orientation="Horizontal">
                 <Button Width="15"
                         Height="15"
+                        Padding="0"
                         Background="{x:Null}"
                         BorderBrush="{x:Null}"
                         BorderThickness="0"
-                        Command="{Binding DeleteCategoryCommand,
-                                          Source={StaticResource MainViewModel}}"
+                        Command="{Binding DeleteCategoryCommand, Source={StaticResource MainViewModel}}"
                         CommandParameter="{Binding}"
-                        Padding="0"
                         Style="{x:Null}"
                         ToolTip="Delete Category">
                     <Border Background="{DynamicResource AccentColorBrush}"
@@ -49,49 +46,45 @@
                 </Button>
                 <Button Width="15"
                         Height="15"
-                        Margin="5 0"
+                        Margin="5,0"
+                        Padding="0"
                         Background="{x:Null}"
                         BorderBrush="{x:Null}"
                         BorderThickness="0"
-                        Command="{Binding ToggleCategoryCommand,
-                                          Source={StaticResource MainViewModel}}"
+                        Command="{Binding ToggleCategoryCommand, Source={StaticResource MainViewModel}}"
                         CommandParameter="{Binding}"
-                        Padding="0"
                         Style="{x:Null}"
                         ToolTip="Toggle Events">
                     <Border Background="{DynamicResource AccentColorBrush}"
                             BorderBrush="{DynamicResource WhiteColorBrush}"
                             BorderThickness="1"
                             CornerRadius="2">
-                        <Path Margin="3 2"
+                        <Path Margin="3,2"
                               Data="M 0 4 L 3 7 7 0"
                               Stretch="None"
                               Stroke="{DynamicResource WhiteColorBrush}"
                               StrokeThickness="1" />
                     </Border>
                 </Button>
-                <TextBlock Margin="5 0"
+                <TextBlock Margin="5,0"
+                           Padding="5"
                            VerticalAlignment="Center"
                            Foreground="{DynamicResource WhiteColorBrush}"
-                           Padding="5"
                            Text="{Binding}" />
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot"
-          DataContext="{StaticResource MainViewModel}">
+    <Grid x:Name="LayoutRoot" DataContext="{StaticResource MainViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="{Binding ElementName=EventOptionsExpander,
-                                            Path=Height}" />
+            <RowDefinition Height="{Binding ElementName=EventOptionsExpander, Path=Height}" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="33" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         <GroupBox x:Name="EventOptionsExpander"
                   Grid.Row="0"
                   Margin="3"
-                  Header="{Binding Locale[event_EventOptionsHeader],
-                                   Source={StaticResource PluginViewModel}}">
+                  Header="{Binding Locale[event_EventOptionsHeader], Source={StaticResource PluginViewModel}}">
             <StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -100,32 +93,21 @@
                     <DockPanel Grid.Row="0"
                                Margin="3"
                                LastChildFill="True">
-                        <TextBlock Padding="5"
-                                   Text="{Binding Locale[event_CategoryLabel],
-                                                  Source={StaticResource PluginViewModel}}" />
+                        <TextBlock Padding="5" Text="{Binding Locale[event_CategoryLabel], Source={StaticResource PluginViewModel}}" />
                         <TextBox x:Name="TCategory"
                                  Width="100"
-                                 Text="{Binding Locale[event_SampleCategory],
-                                                Source={StaticResource PluginViewModel}}" />
-                        <TextBlock Padding="5"
-                                   Text="{Binding Locale[event_DelayLabel],
-                                                  Source={StaticResource PluginViewModel}}" />
+                                 Text="{Binding Locale[event_SampleCategory], Source={StaticResource PluginViewModel}}" />
+                        <TextBlock Padding="5" Text="{Binding Locale[event_DelayLabel], Source={StaticResource PluginViewModel}}" />
                         <TextBox x:Name="TDelay"
                                  Width="40"
                                  HorizontalContentAlignment="Center"
                                  Text="0" />
-                        <TextBlock Padding="5"
-                                   Text="{Binding Locale[event_RegExLabel],
-                                                  Source={StaticResource PluginViewModel}}" />
-                        <TextBox x:Name="TRegEx"
-                                 Text="{Binding Locale[event_SampleText],
-                                                Source={StaticResource PluginViewModel}}" />
+                        <TextBlock Padding="5" Text="{Binding Locale[event_RegExLabel], Source={StaticResource PluginViewModel}}" />
+                        <TextBox x:Name="TRegEx" Text="{Binding Locale[event_SampleText], Source={StaticResource PluginViewModel}}" />
                     </DockPanel>
                 </Grid>
-                <Expander Header="{Binding Locale[event_SoundOptionsHeader],
-                                           Source={StaticResource PluginViewModel}}">
-                    <DockPanel Margin="3"
-                               LastChildFill="True">
+                <Expander Header="{Binding Locale[event_SoundOptionsHeader], Source={StaticResource PluginViewModel}}">
+                    <DockPanel Margin="3" LastChildFill="True">
                         <Grid Margin="3">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="33" />
@@ -138,21 +120,18 @@
                             <TextBlock Grid.Row="0"
                                        Grid.Column="0"
                                        Padding="5"
-                                       Text="{Binding Locale[event_SoundLabel],
-                                                      Source={StaticResource PluginViewModel}}" />
+                                       Text="{Binding Locale[event_SoundLabel], Source={StaticResource PluginViewModel}}" />
                             <ComboBox x:Name="TSound"
                                       Grid.Row="0"
                                       Grid.Column="1"
                                       Width="Auto"
                                       Height="27"
                                       IsReadOnly="False"
-                                      ItemsSource="{Binding SoundFiles,
-                                                            Source={StaticResource PluginViewModel}}" />
+                                      ItemsSource="{Binding SoundFiles, Source={StaticResource PluginViewModel}}" />
                             <TextBlock Grid.Row="1"
                                        Grid.Column="0"
                                        Padding="5"
-                                       Text="{Binding Locale[event_TTSLabel],
-                                                      Source={StaticResource PluginViewModel}}" />
+                                       Text="{Binding Locale[event_TTSLabel], Source={StaticResource PluginViewModel}}" />
                             <TextBox x:Name="TTTS"
                                      Grid.Row="1"
                                      Grid.Column="1"
@@ -171,23 +150,18 @@
                             <DockPanel Grid.Row="0"
                                        Grid.Column="0"
                                        Height="30"
-                                       Margin="3 0 0 0">
-                                <TextBlock Padding="5"
-                                           Text="{Binding Locale[event_VolumeLabel],
-                                                          Source={StaticResource PluginViewModel}}" />
+                                       Margin="3,0,0,0">
+                                <TextBlock Padding="5" Text="{Binding Locale[event_VolumeLabel], Source={StaticResource PluginViewModel}}" />
                                 <TextBlock Width="60"
                                            Height="27"
-                                           Margin="3 0 0 0"
-                                           VerticalAlignment="Center"
+                                           Margin="3,0,0,0"
                                            Padding="5"
-                                           Text="{Binding ElementName=TVolume,
-                                                          Path=Value,
-                                                          StringFormat=\{0:P2\}}" />
+                                           VerticalAlignment="Center"
+                                           Text="{Binding ElementName=TVolume, Path=Value, StringFormat=\{0:P2\}}" />
                                 <Button Height="27"
-                                        Margin="3 0 0 0"
+                                        Margin="3,0,0,0"
                                         Command="{Binding TestSoundCommand}"
-                                        Content="{Binding Locale[event_TestSoundButtonText],
-                                                          Source={StaticResource PluginViewModel}}"
+                                        Content="{Binding Locale[event_TestSoundButtonText], Source={StaticResource PluginViewModel}}"
                                         DockPanel.Dock="Right" />
                                 <Slider x:Name="TVolume"
                                         IsSnapToTickEnabled="True"
@@ -200,18 +174,14 @@
                             <DockPanel Grid.Row="1"
                                        Grid.Column="0"
                                        Height="30"
-                                       Margin="3 0 0 0">
-                                <TextBlock Padding="5"
-                                           Text="{Binding Locale[event_RateLabel],
-                                                          Source={StaticResource PluginViewModel}}" />
+                                       Margin="3,0,0,0">
+                                <TextBlock Padding="5" Text="{Binding Locale[event_RateLabel], Source={StaticResource PluginViewModel}}" />
                                 <TextBlock Width="60"
                                            Height="27"
-                                           Margin="3 0 0 0"
-                                           VerticalAlignment="Center"
+                                           Margin="3,0,0,0"
                                            Padding="5"
-                                           Text="{Binding ElementName=TRate,
-                                                          Path=Value,
-                                                          StringFormat=\{0:N\}}" />
+                                           VerticalAlignment="Center"
+                                           Text="{Binding ElementName=TRate, Path=Value, StringFormat=\{0:N\}}" />
                                 <Slider x:Name="TRate"
                                         IsSnapToTickEnabled="True"
                                         Maximum="10"
@@ -224,30 +194,25 @@
                         </Grid>
                     </DockPanel>
                 </Expander>
-                <Expander Header="{Binding Locale[event_ExecutableOptionsHeader],
-                                           Source={StaticResource PluginViewModel}}">
+                <Expander Header="{Binding Locale[event_ExecutableOptionsHeader], Source={StaticResource PluginViewModel}}">
                     <DockPanel Margin="3">
                         <DockPanel Margin="3"
                                    Dock="Top"
                                    LastChildFill="True">
-                            <TextBlock DockPanel.Dock="Left"
-                                       Padding="5"
-                                       Text="{Binding Locale[event_ExecutableLabel],
-                                                      Source={StaticResource PluginViewModel}}" />
-                            <Button Margin="3 0 0 0"
+                            <TextBlock Padding="5"
+                                       DockPanel.Dock="Left"
+                                       Text="{Binding Locale[event_ExecutableLabel], Source={StaticResource PluginViewModel}}" />
+                            <Button Margin="3,0,0,0"
                                     VerticalContentAlignment="Center"
                                     Command="{Binding SelectExecutableCommand}"
-                                    Content="{Binding Locale[event_SelectExecutableButtonText],
-                                                      Source={StaticResource PluginViewModel}}"
+                                    Content="{Binding Locale[event_SelectExecutableButtonText], Source={StaticResource PluginViewModel}}"
                                     DockPanel.Dock="Right" />
-                            <TextBox x:Name="TExecutable"
-                                     Text="{Binding Locale[event_SampleExecutable],
-                                                    Source={StaticResource PluginViewModel}}" />
+                            <TextBox x:Name="TExecutable" Text="{Binding Locale[event_SampleExecutable], Source={StaticResource PluginViewModel}}" />
                         </DockPanel>
                         <DockPanel Dock="Bottom">
                             <TextBlock Padding="5"
-                                     Text="{Binding Locale[event_ArgumentsLabel],
-                                     Source={StaticResource PluginViewModel}}" DockPanel.Dock="Left" />
+                                       DockPanel.Dock="Left"
+                                       Text="{Binding Locale[event_ArgumentsLabel], Source={StaticResource PluginViewModel}}" />
                             <TextBox x:Name="TArguments"
                                      DockPanel.Dock="Left"
                                      Text="" />
@@ -259,14 +224,13 @@
         <DataGrid x:Name="Events"
                   Grid.Row="1"
                   Margin="3"
+                  Utilities:SelectionBehavior.SelectionChanged="{Binding EventSelectionCommand}"
                   AutoGenerateColumns="False"
                   BorderBrush="{DynamicResource AccentColorBrush}"
                   BorderThickness="1"
                   CanUserAddRows="False"
-                  ItemsSource="{Binding Events,
-                                        Source={StaticResource PluginViewModel}}"
-                  SelectionMode="Single"
-                  Utilities:SelectionBehavior.SelectionChanged="{Binding EventSelectionCommand}">
+                  ItemsSource="{Binding Events, Source={StaticResource PluginViewModel}}"
+                  SelectionMode="Single">
             <DataGrid.GroupStyle>
                 <!--  Style for groups at top level.  -->
                 <GroupStyle>
@@ -275,8 +239,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type GroupItem}">
-                                        <Expander Header="{Binding ElementName=CategoryInfo,
-                                                                   Path=Text}"
+                                        <Expander Header="{Binding ElementName=CategoryInfo, Path=Text}"
                                                   HeaderTemplate="{StaticResource EventHeaderTemplate}"
                                                   IsExpanded="False">
                                             <Expander.Content>
@@ -310,75 +273,59 @@
                     IsReadOnly="True"
                     Utilities:GridViewSort.PropertyName="Category" />
                 -->
-                <DataGridCheckBoxColumn Binding="{Binding Enabled}"
-                                        Header="{Binding Locale[event_EnabledHeader],
-                                                         Source={StaticResource PluginViewModel}}"
-                                        Utilities:GridViewSort.PropertyName="Enabled" />
-                <DataGridTextColumn Binding="{Binding RegEx}"
-                                    Header="{Binding Locale[event_RegExHeader],
-                                                     Source={StaticResource PluginViewModel}}"
-                                    IsReadOnly="True"
-                                    Utilities:GridViewSort.PropertyName="RegEx" />
-                <DataGridTextColumn Binding="{Binding Delay}"
-                                    Header="{Binding Locale[event_DelayHeader],
-                                                     Source={StaticResource PluginViewModel}}"
-                                    IsReadOnly="True"
-                                    Utilities:GridViewSort.PropertyName="Delay" />
-                <DataGridTextColumn Binding="{Binding Sound}"
-                                    Header="{Binding Locale[event_SoundHeader],
-                                                     Source={StaticResource PluginViewModel}}"
-                                    IsReadOnly="True"
-                                    Utilities:GridViewSort.PropertyName="Sound" />
-                <DataGridTextColumn Binding="{Binding Volume}"
-                                    Header="{Binding Locale[event_VolumeHeader],
-                                                     Source={StaticResource PluginViewModel}}"
-                                    IsReadOnly="True"
-                                    Utilities:GridViewSort.PropertyName="Volume" />
-                <DataGridTextColumn Binding="{Binding Executable}"
-                                    Header="{Binding Locale[event_ExecutableHeader],
-                                                     Source={StaticResource PluginViewModel}}"
-                                    IsReadOnly="True"
-                                    Utilities:GridViewSort.PropertyName="Executable" />
-                <DataGridTextColumn Binding="{Binding TTS}"
-                                    Header="{Binding Locale[event_TTSHeader],
-                                                     Source={StaticResource PluginViewModel}}"
-                                    IsReadOnly="True"
-                                    Utilities:GridViewSort.PropertyName="TTS" />
-                <DataGridTextColumn Binding="{Binding Rate}"
-                                    Header="{Binding Locale[event_RateHeader],
-                                                     Source={StaticResource PluginViewModel}}"
-                                    IsReadOnly="True"
-                                    Utilities:GridViewSort.PropertyName="Rate" />
+                <DataGridCheckBoxColumn Utilities:GridViewSort.PropertyName="Enabled"
+                                        Binding="{Binding Enabled}"
+                                        Header="{Binding Locale[event_EnabledHeader], Source={StaticResource PluginViewModel}}" />
+                <DataGridTextColumn Utilities:GridViewSort.PropertyName="RegEx"
+                                    Binding="{Binding RegEx}"
+                                    Header="{Binding Locale[event_RegExHeader], Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True" />
+                <DataGridTextColumn Utilities:GridViewSort.PropertyName="Delay"
+                                    Binding="{Binding Delay}"
+                                    Header="{Binding Locale[event_DelayHeader], Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True" />
+                <DataGridTextColumn Utilities:GridViewSort.PropertyName="Sound"
+                                    Binding="{Binding Sound}"
+                                    Header="{Binding Locale[event_SoundHeader], Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True" />
+                <DataGridTextColumn Utilities:GridViewSort.PropertyName="Volume"
+                                    Binding="{Binding Volume}"
+                                    Header="{Binding Locale[event_VolumeHeader], Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True" />
+                <DataGridTextColumn Utilities:GridViewSort.PropertyName="Executable"
+                                    Binding="{Binding Executable}"
+                                    Header="{Binding Locale[event_ExecutableHeader], Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True" />
+                <DataGridTextColumn Utilities:GridViewSort.PropertyName="TTS"
+                                    Binding="{Binding TTS}"
+                                    Header="{Binding Locale[event_TTSHeader], Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True" />
+                <DataGridTextColumn Utilities:GridViewSort.PropertyName="Rate"
+                                    Binding="{Binding Rate}"
+                                    Header="{Binding Locale[event_RateHeader], Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
         <DockPanel Grid.Row="2"
                    Margin="3"
                    LastChildFill="True">
-            <Button MinWidth="28"
+            <Button MinWidth="35"
                     Command="{Binding RefreshSoundListCommand}"
-                    ToolTip="{Binding Locale[event_RefreshSoundListButtonText],
-                                      Source={StaticResource PluginViewModel}}">
+                    ToolTip="{Binding Locale[event_RefreshSoundListButtonText], Source={StaticResource PluginViewModel}}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Width="16"
-                           Height="16"
-                           RenderOptions.BitmapScalingMode="HighQuality"
-                           Source="/FFXIVAPP.Plugin.Event;component/Media/Images/Refresh.png" />
+                    <iconPacks:PackIconFontAwesome Kind="Refresh" Spin="True" />
                     <TextBlock Padding="3,0,3,0"
-                               Text="{Binding Locale[event_RefreshSoundListButtonText],
-                                              Source={StaticResource PluginViewModel}}"
-                               Visibility="{Binding EnableHelpLabels,
-                                                    Converter={StaticResource VisibilityConverter},
-                                                    Source={StaticResource PluginViewModel}}" />
+                               Text="{Binding Locale[event_RefreshSoundListButtonText], Source={StaticResource PluginViewModel}}"
+                               Visibility="{Binding EnableHelpLabels, Converter={StaticResource VisibilityConverter}, Source={StaticResource PluginViewModel}}" />
                 </StackPanel>
             </Button>
-            <Button Width="27"
-                    Margin="3 0 0 0"
+            <Button Width="35"
+                    Margin="3,0,0,0"
                     Command="{Binding DeleteEventCommand}"
-                    Content="-" />
-            <Button Margin="3 0 0 0"
+                    Content="{iconPacks:PackIconFontAwesome Kind=Times}" />
+            <Button Margin="3,0,0,0"
                     Command="{Binding AddOrUpdateEventCommand}"
-                    Content="{Binding Locale[event_AddUpdateEventButtonText],
-                                      Source={StaticResource PluginViewModel}}" />
+                    Content="{Binding Locale[event_AddUpdateEventButtonText], Source={StaticResource PluginViewModel}}" />
         </DockPanel>
     </Grid>
 </UserControl>

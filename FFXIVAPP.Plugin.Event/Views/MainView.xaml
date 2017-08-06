@@ -313,7 +313,7 @@
                     Command="{Binding RefreshSoundListCommand}"
                     ToolTip="{Binding Locale[event_RefreshSoundListButtonText], Source={StaticResource PluginViewModel}}">
                 <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconFontAwesome Kind="Refresh" Spin="True" />
+                    <iconPacks:PackIconFontAwesome Kind="Refresh" />
                     <TextBlock Padding="3,0,3,0"
                                Text="{Binding Locale[event_RefreshSoundListButtonText], Source={StaticResource PluginViewModel}}"
                                Visibility="{Binding EnableHelpLabels, Converter={StaticResource VisibilityConverter}, Source={StaticResource PluginViewModel}}" />

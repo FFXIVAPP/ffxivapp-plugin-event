@@ -1,86 +1,52 @@
-﻿// FFXIVAPP.Plugin.Event ~ SettingsViewModel.cs
-// 
-// Copyright © 2007 - 2017 Ryan Wilson - All Rights Reserved
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SettingsViewModel.cs" company="SyndicatedLife">
+//   Copyright(c) 2018 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (http://syndicated.life/)
+//   Licensed under the MIT license. See LICENSE.md in the solution root for full license information.
+// </copyright>
+// <summary>
+//   SettingsViewModel.cs Implementation
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using FFXIVAPP.Common.Helpers;
-using FFXIVAPP.Common.ViewModelBase;
-using FFXIVAPP.Plugin.Event.Properties;
-using FFXIVAPP.Plugin.Event.Views;
+namespace FFXIVAPP.Plugin.Event.ViewModels {
+    using System;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+    using System.Windows.Input;
 
-namespace FFXIVAPP.Plugin.Event.ViewModels
-{
-    internal sealed class SettingsViewModel : INotifyPropertyChanged
-    {
-        public SettingsViewModel()
-        {
-            TestSoundCommand = new DelegateCommand(TestSound);
+    using FFXIVAPP.Common.Helpers;
+    using FFXIVAPP.Common.ViewModelBase;
+    using FFXIVAPP.Plugin.Event.Properties;
+    using FFXIVAPP.Plugin.Event.Views;
+
+    internal sealed class SettingsViewModel : INotifyPropertyChanged {
+        private static Lazy<SettingsViewModel> _instance = new Lazy<SettingsViewModel>(() => new SettingsViewModel());
+
+        public SettingsViewModel() {
+            this.TestSoundCommand = new DelegateCommand(TestSound);
         }
 
-        #region Declarations
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        public static SettingsViewModel Instance {
+            get {
+                return _instance.Value;
+            }
+        }
 
         public ICommand TestSoundCommand { get; private set; }
 
-        #endregion
-
-        #region Command Bindings
-
-        private static void TestSound()
-        {
-            if (SettingsView.View.TSound.Text.Trim() == string.Empty)
-            {
+        private static void TestSound() {
+            if (SettingsView.View.TSound.Text.Trim() == string.Empty) {
                 return;
             }
+
             var volume = Settings.Default.GlobalVolume * 100;
             SoundPlayerHelper.PlayCached(SettingsView.View.TSound.Text, (int) volume);
         }
 
-        #endregion
-
-        #region Property Bindings
-
-        private static Lazy<SettingsViewModel> _instance = new Lazy<SettingsViewModel>(() => new SettingsViewModel());
-
-        public static SettingsViewModel Instance
-        {
-            get { return _instance.Value; }
+        private void RaisePropertyChanged([CallerMemberName] string caller = "") {
+            this.PropertyChanged(this, new PropertyChangedEventArgs(caller));
         }
-
-        #endregion
-
-        #region Loading Functions
-
-        #endregion
-
-        #region Utility Functions
-
-        #endregion
-
-        #region Implementation of INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
-        private void RaisePropertyChanged([CallerMemberName] string caller = "")
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(caller));
-        }
-
-        #endregion
     }
 }

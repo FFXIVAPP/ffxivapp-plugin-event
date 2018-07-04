@@ -1,109 +1,92 @@
-﻿// FFXIVAPP.Plugin.Event ~ LogPublisher.cs
-// 
-// Copyright © 2007 - 2017 Ryan Wilson - All Rights Reserved
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="LogPublisher.cs" company="SyndicatedLife">
+//   Copyright(c) 2018 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (http://syndicated.life/)
+//   Licensed under the MIT license. See LICENSE.md in the solution root for full license information.
+// </copyright>
+// <summary>
+//   LogPublisher.cs Implementation
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Timers;
-using FFXIVAPP.Common.Helpers;
-using FFXIVAPP.Common.Models;
-using FFXIVAPP.Common.RegularExpressions;
-using FFXIVAPP.Common.Utilities;
-using FFXIVAPP.Plugin.Event.Models;
-using FFXIVAPP.Plugin.Event.Properties;
-using NLog;
-using Sharlayan.Core;
+namespace FFXIVAPP.Plugin.Event.Utilities {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Timers;
 
-namespace FFXIVAPP.Plugin.Event.Utilities
-{
-    public static class LogPublisher
-    {
-        #region Logger
+    using FFXIVAPP.Common.Helpers;
+    using FFXIVAPP.Common.Models;
+    using FFXIVAPP.Common.RegularExpressions;
+    using FFXIVAPP.Common.Utilities;
+    using FFXIVAPP.Plugin.Event.Models;
+    using FFXIVAPP.Plugin.Event.Properties;
 
+    using NLog;
+
+    using Sharlayan.Core;
+
+    public static class LogPublisher {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        #endregion
-
-        public static void Process(ChatLogEntry chatLogEntry)
-        {
-            try
-            {
-                var line = chatLogEntry.Line.Replace("  ", " ");
-                foreach (var item in PluginViewModel.Instance.Events.Where(e => e.Enabled))
-                {
+        public static void Process(ChatLogItem chatLogItem) {
+            try {
+                var line = chatLogItem.Line.Replace("  ", " ");
+                foreach (LogEvent item in PluginViewModel.Instance.Events.Where(e => e.Enabled)) {
                     var resuccess = false;
                     var arguments = item.Arguments;
                     var tts = item.TTS;
-                    if (SharedRegEx.IsValidRegex(item.RegEx))
-                    {
-                        var reg = Regex.Match(line, item.RegEx);
-                        if (reg.Success)
-                        {
+                    if (SharedRegEx.IsValidRegex(item.RegEx)) {
+                        Match reg = Regex.Match(line, item.RegEx);
+                        if (reg.Success) {
                             resuccess = true;
                             arguments = reg.Result(item.Arguments);
                             tts = reg.Result(tts);
                         }
                     }
-                    else
-                    {
+                    else {
                         resuccess = item.RegEx == line;
                     }
-                    if (!resuccess)
-                    {
+
+                    if (!resuccess) {
                         continue;
                     }
 
                     ExecutLogEvent(item, arguments, tts);
                 }
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Logging.Log(Logger, new LogItem(ex, true));
             }
         }
 
-        private static void ExecutLogEvent(LogEvent logEvent, string arguments, string tts)
-        {
+        private static void ExecuteActions(IEnumerable<Action> actions) {
+            foreach (Action action in actions) {
+                action();
+            }
+        }
+
+        private static void ExecutLogEvent(LogEvent logEvent, string arguments, string tts) {
             var volume = Convert.ToInt32(logEvent.Volume * Settings.Default.GlobalVolume);
 
-            var actions = new List<Action>
-            {
+            List<Action> actions = new List<Action> {
                 PlaySound(logEvent, volume),
                 RunExecutable(logEvent, arguments),
                 PlayTTS(tts, volume, logEvent.Rate)
             };
             actions.RemoveAll(a => a == null);
-            if (!actions.Any())
-            {
+            if (!actions.Any()) {
                 return;
             }
 
             var delay = logEvent.Delay;
-            if (delay <= 0)
-            {
+            if (delay <= 0) {
                 ExecuteActions(actions);
             }
-            else
-            {
+            else {
                 var timer = new Timer(delay * 1000);
                 ElapsedEventHandler timerEventHandler = null;
-                timerEventHandler = delegate
-                {
+                timerEventHandler = delegate {
                     timer.Elapsed -= timerEventHandler;
                     timer.Dispose();
 
@@ -114,43 +97,29 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             }
         }
 
-        private static Action PlaySound(LogEvent logEvent, int volume)
-        {
+        private static Action PlaySound(LogEvent logEvent, int volume) {
             var soundFile = logEvent.Sound;
-            if (String.IsNullOrWhiteSpace(soundFile))
-            {
+            if (string.IsNullOrWhiteSpace(soundFile)) {
                 return null;
             }
 
             return () => SoundPlayerHelper.PlayCached(soundFile, volume);
         }
 
-        private static Action RunExecutable(LogEvent logEvent, string arguments)
-        {
-            if (String.IsNullOrWhiteSpace(logEvent.Executable))
-            {
-                return null;
-            }
-
-            return () => ExecutableHelper.Run(logEvent.Executable, arguments);
-        }
-
-        private static Action PlayTTS(string tts, int volume, int rate)
-        {
-            if (String.IsNullOrWhiteSpace(tts))
-            {
+        private static Action PlayTTS(string tts, int volume, int rate) {
+            if (string.IsNullOrWhiteSpace(tts)) {
                 return null;
             }
 
             return () => TTSPlayer.Speak(tts, volume, rate);
         }
 
-        private static void ExecuteActions(IEnumerable<Action> actions)
-        {
-            foreach (var action in actions)
-            {
-                action();
+        private static Action RunExecutable(LogEvent logEvent, string arguments) {
+            if (string.IsNullOrWhiteSpace(logEvent.Executable)) {
+                return null;
             }
+
+            return () => ExecutableHelper.Run(logEvent.Executable, arguments);
         }
     }
 }

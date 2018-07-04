@@ -1,174 +1,176 @@
-﻿// FFXIVAPP.Plugin.Event ~ LogEvent.cs
-// 
-// Copyright © 2007 - 2017 Ryan Wilson - All Rights Reserved
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="LogEvent.cs" company="SyndicatedLife">
+//   Copyright(c) 2018 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (http://syndicated.life/)
+//   Licensed under the MIT license. See LICENSE.md in the solution root for full license information.
+// </copyright>
+// <summary>
+//   LogEvent.cs Implementation
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+namespace FFXIVAPP.Plugin.Event.Models {
+    using System;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
 
-namespace FFXIVAPP.Plugin.Event.Models
-{
-    public class LogEvent : INotifyPropertyChanged
-    {
-        public LogEvent()
-        {
-            Delay = 0;
-            Enabled = true;
-            Executable = string.Empty;
-            Sound = string.Empty;
-            Volume = 100;
-            TTS = string.Empty;
-            Rate = -2;
-        }
-
-        #region Property Bindings
-
+    public class LogEvent : INotifyPropertyChanged {
         private string _arguments;
+
         private string _category;
+
         private int _delay;
+
         private bool _enabled;
+
         private string _executable;
+
         private Guid _key;
+
         private int _rate;
+
         private string _regEx;
+
         private string _sound;
+
         private string _tts;
+
         private double _volume;
 
-        public Guid Key
-        {
-            get { return _key; }
-            set
-            {
-                _key = value;
-                RaisePropertyChanged();
-            }
+        public LogEvent() {
+            this.Delay = 0;
+            this.Enabled = true;
+            this.Executable = string.Empty;
+            this.Sound = string.Empty;
+            this.Volume = 100;
+            this.TTS = string.Empty;
+            this.Rate = -2;
         }
-
-        public string Sound
-        {
-            get { return _sound; }
-            set
-            {
-                _sound = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string TTS
-        {
-            get { return _tts; }
-            set
-            {
-                _tts = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int Rate
-        {
-            get { return _rate; }
-            set
-            {
-                _rate = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public double Volume
-        {
-            get { return _volume; }
-            set
-            {
-                _volume = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int Delay
-        {
-            get { return _delay; }
-            set
-            {
-                _delay = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string RegEx
-        {
-            get { return _regEx; }
-            set
-            {
-                _regEx = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Category
-        {
-            get { return _category; }
-            set
-            {
-                _category = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Executable
-        {
-            get { return _executable; }
-            set
-            {
-                _executable = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Arguments
-        {
-            get { return _arguments; }
-            set
-            {
-                _arguments = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool Enabled
-        {
-            get { return _enabled; }
-            set
-            {
-                _enabled = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        #endregion
-
-        #region Implementation of INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        private void RaisePropertyChanged([CallerMemberName] string caller = "")
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(caller));
+        public string Arguments {
+            get {
+                return this._arguments;
+            }
+
+            set {
+                this._arguments = value;
+                this.RaisePropertyChanged();
+            }
         }
 
-        #endregion
+        public string Category {
+            get {
+                return this._category;
+            }
+
+            set {
+                this._category = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public int Delay {
+            get {
+                return this._delay;
+            }
+
+            set {
+                this._delay = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public bool Enabled {
+            get {
+                return this._enabled;
+            }
+
+            set {
+                this._enabled = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public string Executable {
+            get {
+                return this._executable;
+            }
+
+            set {
+                this._executable = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public Guid Key {
+            get {
+                return this._key;
+            }
+
+            set {
+                this._key = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public int Rate {
+            get {
+                return this._rate;
+            }
+
+            set {
+                this._rate = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public string RegEx {
+            get {
+                return this._regEx;
+            }
+
+            set {
+                this._regEx = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public string Sound {
+            get {
+                return this._sound;
+            }
+
+            set {
+                this._sound = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public string TTS {
+            get {
+                return this._tts;
+            }
+
+            set {
+                this._tts = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public double Volume {
+            get {
+                return this._volume;
+            }
+
+            set {
+                this._volume = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        private void RaisePropertyChanged([CallerMemberName] string caller = "") {
+            this.PropertyChanged(this, new PropertyChangedEventArgs(caller));
+        }
     }
 }

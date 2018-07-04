@@ -1,89 +1,55 @@
-﻿// FFXIVAPP.Plugin.Event ~ SampleViewModel.cs
-// 
-// Copyright © 2007 - 2017 Ryan Wilson - All Rights Reserved
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SampleViewModel.cs" company="SyndicatedLife">
+//   Copyright(c) 2018 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (http://syndicated.life/)
+//   Licensed under the MIT license. See LICENSE.md in the solution root for full license information.
+// </copyright>
+// <summary>
+//   SampleViewModel.cs Implementation
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using FFXIVAPP.Common.ViewModelBase;
+namespace FFXIVAPP.Plugin.Event.ViewModels {
+    using System;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+    using System.Windows.Input;
 
-namespace FFXIVAPP.Plugin.Event.ViewModels
-{
-    internal sealed class SampleViewModel : INotifyPropertyChanged
-    {
-        public SampleViewModel()
-        {
-            SampleCommand = new DelegateCommand(Sample);
-            SampleCommandT = new DelegateCommand<object>(SampleT);
-        }
+    using FFXIVAPP.Common.ViewModelBase;
 
-        #region Property Bindings
-
+    internal sealed class SampleViewModel : INotifyPropertyChanged {
         private static Lazy<SampleViewModel> _instance = new Lazy<SampleViewModel>(() => new SampleViewModel());
 
-        public static SampleViewModel Instance
-        {
-            get { return _instance.Value; }
+        public SampleViewModel() {
+            this.SampleCommand = new DelegateCommand(Sample);
+            this.SampleCommandT = new DelegateCommand<object>(SampleT);
         }
-
-        #endregion
-
-        #region Declarations
-
-        public ICommand SampleCommand { get; private set; }
-        public ICommand SampleCommandT { get; private set; }
-
-        #endregion
-
-        #region Loading Functions
-
-        #endregion
-
-        #region Utility Functions
-
-        #endregion
-
-        #region Command Bindings
-
-        /// <summary>
-        /// </summary>
-        public static void Sample()
-        {
-            //do something here
-        }
-
-        /// <summary>
-        /// </summary>
-        public static void SampleT(object parameter)
-        {
-            //do something here
-        }
-
-        #endregion
-
-        #region Implementation of INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        private void RaisePropertyChanged([CallerMemberName] string caller = "")
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(caller));
+        public static SampleViewModel Instance {
+            get {
+                return _instance.Value;
+            }
         }
 
-        #endregion
+        public ICommand SampleCommand { get; private set; }
+
+        public ICommand SampleCommandT { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        public static void Sample() {
+            // do something here
+        }
+
+        /// <summary>
+        /// </summary>
+        public static void SampleT(object parameter) {
+            // do something here
+        }
+
+        private void RaisePropertyChanged([CallerMemberName] string caller = "") {
+            this.PropertyChanged(this, new PropertyChangedEventArgs(caller));
+        }
     }
 }

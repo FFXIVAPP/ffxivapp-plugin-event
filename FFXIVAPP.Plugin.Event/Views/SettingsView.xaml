@@ -22,11 +22,13 @@
     <Grid x:Name="LayoutRoot"
           DataContext="{StaticResource SettingsViewModel}">
         <TabControl>
-            <TabItem Header="{Binding Locale[app_MainSettingsTabHeader],
+            <TabItem
+                Header="{Binding Locale[app_MainSettingsTabHeader],
                                       Source={StaticResource PluginViewModel}}">
                 <ScrollViewer>
                     <StackPanel>
-                        <GroupBox Header="{Binding Locale[event_GlobalVolumeHeader],
+                        <GroupBox
+                            Header="{Binding Locale[event_GlobalVolumeHeader],
                                                    Source={StaticResource PluginViewModel}}">
                             <DockPanel Margin="3"
                                        LastChildFill="True">

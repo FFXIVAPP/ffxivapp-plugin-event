@@ -93,17 +93,21 @@
                     <DockPanel Grid.Row="0"
                                Margin="3"
                                LastChildFill="True">
-                        <TextBlock Padding="5" Text="{Binding Locale[event_CategoryLabel], Source={StaticResource PluginViewModel}}" />
+                        <TextBlock Padding="5"
+                                   Text="{Binding Locale[event_CategoryLabel], Source={StaticResource PluginViewModel}}" />
                         <TextBox x:Name="TCategory"
                                  Width="100"
                                  Text="{Binding Locale[event_SampleCategory], Source={StaticResource PluginViewModel}}" />
-                        <TextBlock Padding="5" Text="{Binding Locale[event_DelayLabel], Source={StaticResource PluginViewModel}}" />
+                        <TextBlock Padding="5"
+                                   Text="{Binding Locale[event_DelayLabel], Source={StaticResource PluginViewModel}}" />
                         <TextBox x:Name="TDelay"
                                  Width="40"
                                  HorizontalContentAlignment="Center"
                                  Text="0" />
-                        <TextBlock Padding="5" Text="{Binding Locale[event_RegExLabel], Source={StaticResource PluginViewModel}}" />
-                        <TextBox x:Name="TRegEx" Text="{Binding Locale[event_SampleText], Source={StaticResource PluginViewModel}}" />
+                        <TextBlock Padding="5"
+                                   Text="{Binding Locale[event_RegExLabel], Source={StaticResource PluginViewModel}}" />
+                        <TextBox x:Name="TRegEx"
+                                 Text="{Binding Locale[event_SampleText], Source={StaticResource PluginViewModel}}" />
                     </DockPanel>
                 </Grid>
                 <Expander Header="{Binding Locale[event_SoundOptionsHeader], Source={StaticResource PluginViewModel}}">
@@ -151,7 +155,8 @@
                                        Grid.Column="0"
                                        Height="30"
                                        Margin="3,0,0,0">
-                                <TextBlock Padding="5" Text="{Binding Locale[event_VolumeLabel], Source={StaticResource PluginViewModel}}" />
+                                <TextBlock Padding="5"
+                                           Text="{Binding Locale[event_VolumeLabel], Source={StaticResource PluginViewModel}}" />
                                 <TextBlock Width="60"
                                            Height="27"
                                            Margin="3,0,0,0"
@@ -175,7 +180,8 @@
                                        Grid.Column="0"
                                        Height="30"
                                        Margin="3,0,0,0">
-                                <TextBlock Padding="5" Text="{Binding Locale[event_RateLabel], Source={StaticResource PluginViewModel}}" />
+                                <TextBlock Padding="5"
+                                           Text="{Binding Locale[event_RateLabel], Source={StaticResource PluginViewModel}}" />
                                 <TextBlock Width="60"
                                            Height="27"
                                            Margin="3,0,0,0"
@@ -194,7 +200,8 @@
                         </Grid>
                     </DockPanel>
                 </Expander>
-                <Expander Header="{Binding Locale[event_ExecutableOptionsHeader], Source={StaticResource PluginViewModel}}">
+                <Expander
+                    Header="{Binding Locale[event_ExecutableOptionsHeader], Source={StaticResource PluginViewModel}}">
                     <DockPanel Margin="3">
                         <DockPanel Margin="3"
                                    Dock="Top"
@@ -207,7 +214,8 @@
                                     Command="{Binding SelectExecutableCommand}"
                                     Content="{Binding Locale[event_SelectExecutableButtonText], Source={StaticResource PluginViewModel}}"
                                     DockPanel.Dock="Right" />
-                            <TextBox x:Name="TExecutable" Text="{Binding Locale[event_SampleExecutable], Source={StaticResource PluginViewModel}}" />
+                            <TextBox x:Name="TExecutable"
+                                     Text="{Binding Locale[event_SampleExecutable], Source={StaticResource PluginViewModel}}" />
                         </DockPanel>
                         <DockPanel Dock="Bottom">
                             <TextBlock Padding="5"
@@ -248,7 +256,8 @@
                                                                Padding="5"
                                                                Visibility="Collapsed">
                                                         <TextBlock.Text>
-                                                            <MultiBinding Converter="{StaticResource NameMultiValueConverter}">
+                                                            <MultiBinding
+                                                                Converter="{StaticResource NameMultiValueConverter}">
                                                                 <Binding Path="Name" />
                                                                 <Binding Path="ItemCount" />
                                                             </MultiBinding>
@@ -329,4 +338,3 @@
         </DockPanel>
     </Grid>
 </UserControl>
-

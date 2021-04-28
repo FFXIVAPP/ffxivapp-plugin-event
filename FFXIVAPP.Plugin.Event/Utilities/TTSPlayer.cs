@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TTSPlayer.cs" company="SyndicatedLife">
-//   Copyright(c) 2018 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (http://syndicated.life/)
+//   Copyright© 2007 - 2021 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (https://syndicated.life/)
 //   Licensed under the MIT license. See LICENSE.md in the solution root for full license information.
 // </copyright>
 // <summary>
@@ -31,13 +31,13 @@ namespace FFXIVAPP.Plugin.Event.Utilities {
             var ttsData = new TTSData {
                 Text = tts,
                 Volume = volume,
-                Rate = rate
+                Rate = rate,
             };
             var disposable = new Disposable {
                 MemoryStream = GetMemoryStream(ttsData),
                 DirectSoundOut = Constants.DefaultAudioDevice == Guid.Empty
                                      ? new DirectSoundOut(Latency)
-                                     : new DirectSoundOut(Constants.DefaultAudioDevice, Latency)
+                                     : new DirectSoundOut(Constants.DefaultAudioDevice, Latency),
             };
             disposable.WaveFileReader = new WaveFileReader(disposable.MemoryStream);
             disposable.WaveChannel = new WaveChannel32(disposable.WaveFileReader);

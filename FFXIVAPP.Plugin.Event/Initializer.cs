@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Initializer.cs" company="SyndicatedLife">
-//   Copyright(c) 2018 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (http://syndicated.life/)
+//   Copyright© 2007 - 2021 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (https://syndicated.life/)
 //   Licensed under the MIT license. See LICENSE.md in the solution root for full license information.
 // </copyright>
 // <summary>
@@ -75,7 +75,7 @@ namespace FFXIVAPP.Plugin.Event {
                         Category = xCategory,
                         Enabled = xEnabled,
                         Executable = xExecutable,
-                        Arguments = xArguments
+                        Arguments = xArguments,
                     };
                     var found = PluginViewModel.Instance.Events.Any(@event => @event.Key == logEvent.Key);
                     if (!found) {
@@ -112,7 +112,7 @@ namespace FFXIVAPP.Plugin.Event {
             List<FileInfo> legacyFiles = new List<FileInfo>();
             List<string> filters = new List<string> {
                 "*.wav",
-                "*.mp3"
+                "*.mp3",
             };
             foreach (var filter in filters) {
                 IEnumerable<FileInfo> files = Directory.GetFiles(Constants.BaseDirectory, filter, SearchOption.AllDirectories).Select(file => new FileInfo(file));

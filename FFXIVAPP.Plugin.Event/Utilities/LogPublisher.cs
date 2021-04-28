@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="LogPublisher.cs" company="SyndicatedLife">
-//   Copyright(c) 2018 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (http://syndicated.life/)
+//   Copyright© 2007 - 2021 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (https://syndicated.life/)
 //   Licensed under the MIT license. See LICENSE.md in the solution root for full license information.
 // </copyright>
 // <summary>
@@ -72,7 +72,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities {
             List<Action> actions = new List<Action> {
                 PlaySound(logEvent, volume),
                 RunExecutable(logEvent, arguments),
-                PlayTTS(tts, volume, logEvent.Rate)
+                PlayTTS(tts, volume, logEvent.Rate),
             };
             actions.RemoveAll(a => a == null);
             if (!actions.Any()) {

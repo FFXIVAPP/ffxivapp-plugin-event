@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Settings.cs" company="SyndicatedLife">
-//   Copyright(c) 2018 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (http://syndicated.life/)
+//   Copyright© 2007 - 2021 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (https://syndicated.life/)
 //   Licensed under the MIT license. See LICENSE.md in the solution root for full license information.
 // </copyright>
 // <summary>
@@ -38,7 +38,7 @@ namespace FFXIVAPP.Plugin.Event.Properties {
 
         private static Settings _default;
 
-        public new event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public static Settings Default {
             get {
@@ -116,7 +116,7 @@ namespace FFXIVAPP.Plugin.Event.Properties {
             }
         }
 
-        public new void Reset() {
+        public void Reset() {
             this.DefaultSettings();
             foreach (var key in Constants.Settings) {
                 SettingsProperty settingsProperty = Default.Properties[key];
@@ -207,44 +207,44 @@ namespace FFXIVAPP.Plugin.Event.Properties {
                 List<XValuePair> keyPairList = new List<XValuePair> {
                     new XValuePair {
                         Key = "RegEx",
-                        Value = xRegEx
+                        Value = xRegEx,
                     },
                     new XValuePair {
                         Key = "Sound",
-                        Value = xSound
+                        Value = xSound,
                     },
                     new XValuePair {
                         Key = "TTS",
-                        Value = xTTS
+                        Value = xTTS,
                     },
                     new XValuePair {
                         Key = "Rate",
-                        Value = xRate.ToString(CultureInfo.InvariantCulture)
+                        Value = xRate.ToString(CultureInfo.InvariantCulture),
                     },
                     new XValuePair {
                         Key = "Volume",
-                        Value = xVolume.ToString(CultureInfo.InvariantCulture)
+                        Value = xVolume.ToString(CultureInfo.InvariantCulture),
                     },
                     new XValuePair {
                         Key = "Delay",
-                        Value = xDelay.ToString(CultureInfo.InvariantCulture)
+                        Value = xDelay.ToString(CultureInfo.InvariantCulture),
                     },
                     new XValuePair {
                         Key = "Category",
-                        Value = xCategory
+                        Value = xCategory,
                     },
                     new XValuePair {
                         Key = "Enabled",
-                        Value = xEnabled.ToString()
+                        Value = xEnabled.ToString(),
                     },
                     new XValuePair {
                         Key = "Executable",
-                        Value = xExecutable
+                        Value = xExecutable,
                     },
                     new XValuePair {
                         Key = "Arguments",
-                        Value = xArguments
-                    }
+                        Value = xArguments,
+                    },
                 };
                 XElement element = enumerable.FirstOrDefault(e => e.Attribute("Key").Value == xKey);
                 if (element == null) {
@@ -285,8 +285,8 @@ namespace FFXIVAPP.Plugin.Event.Properties {
                     List<XValuePair> keyPairList = new List<XValuePair> {
                         new XValuePair {
                             Key = "Value",
-                            Value = xValue
-                        }
+                            Value = xValue,
+                        },
                     };
                     XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Setting", xKey, keyPairList);
                 }

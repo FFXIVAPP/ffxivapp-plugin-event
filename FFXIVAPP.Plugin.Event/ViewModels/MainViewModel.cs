@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MainViewModel.cs" company="SyndicatedLife">
-//   Copyright(c) 2018 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (http://syndicated.life/)
+//   Copyright© 2007 - 2021 Ryan Wilson &amp;lt;syndicated.life@gmail.com&amp;gt; (https://syndicated.life/)
 //   Licensed under the MIT license. See LICENSE.md in the solution root for full license information.
 // </copyright>
 // <summary>
@@ -107,7 +107,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels {
                 var popupContent = new PopupContent {
                     PluginName = Plugin.PName,
                     Title = PluginViewModel.Instance.Locale["app_WarningMessage"],
-                    Message = "Delay can only be numeric."
+                    Message = "Delay can only be numeric.",
                 };
                 Plugin.PHost.PopupMessage(Plugin.PName, popupContent);
                 return;
@@ -121,7 +121,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels {
                 Category = MainView.View.TCategory.Text,
                 Executable = MainView.View.TExecutable.Text,
                 Arguments = MainView.View.TArguments.Text,
-                Volume = MainView.View.TVolume.Value * 100
+                Volume = MainView.View.TVolume.Value * 100,
             };
             int result;
             if (int.TryParse(MainView.View.TDelay.Text, out result)) {
